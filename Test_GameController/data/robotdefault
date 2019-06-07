@@ -1,0 +1,9 @@
+Robot Controller
+XL	X Pos LS	3	SLIDER	x	0	1.0	0.2
+YL	Y Pos LS	3	SLIDER	y	0	1.0	0.2
+XR	X Pos RS	3	SLIDER	rx	0	1.0	0.2
+YR	Y Pos RS	3	SLIDER	ry	0	1.0	0.2
+RT	Right Trigger	3	SLIDER	rz	0	1.0	0.0
+LT	Left Trigger	3	SLIDER	z	0	1.0	0.0
+XBUT	Open Claw	1	BUTTON	2	0	0.0	0.0
+YBUT	Close Claw	1	BUTTON	3	0	0.0	0.0
