@@ -13,7 +13,9 @@ class Smart{
     Weights=dWeights;
     Bias=dBias;
     UncheckedIn=Din;
-    if(Type=="Node"){
+    if(Type=="Input"){
+      Activation="Sigmoid";
+    }else if(Type=="Node"){
       Activation="Sigmoid";//"Relu";
     }else if(Type=="Output"){
       Activation="Sigmoid";
@@ -69,7 +71,7 @@ class Point extends Smart{
   Point ClonePoint(){ //Returns a Copy of a Particular Point.
     Point P;
     if(Type=="Input"){
-     P=new Point(Pos.copy(),Vel.copy(),Mass,Friction); 
+     P=new Eye(Pos.copy(),Vel.copy(),Mass,Friction,((Eye)this).EyeRay.Dir.copy()); 
     }else{ //if(Type=="Node"){, Otherwise Node
      P=new Point(Pos.copy(),Vel.copy(),Mass,Friction,FArrayCopy(Weights),Bias,FArrayCopy(UncheckedIn));
     }
@@ -87,8 +89,7 @@ class Point extends Smart{
   //  Acc=PVadd(Acc,PVextend(force,1/Mass));
   //}
   void DrawP(Camera Cam,PGraphics Canvas){// Draws Point.
-      
-     if(Type!="Input"){
+     //if(Type!="Input"){
       Canvas.strokeWeight(2);
       //Canvas.text("State:"+State,Cam.RealToScreenX(Pos.x),Cam.RealToScreenY(Pos.y));  
       //Canvas.text("Weights:"+Weights.length,Cam.RealToScreenX(Pos.x),Cam.RealToScreenY(Pos.y+20));
@@ -114,20 +115,41 @@ class Point extends Smart{
       Canvas.stroke(0,100);
       Canvas.fill(0,Activation(Bias)*200,255,100);
       Canvas.ellipse(Cam.RealToScreenX(Pos.x),Cam.RealToScreenY(Pos.y),8*Cam.Zoom,8*Cam.Zoom);
-     }else{//Eye
-      Canvas.strokeWeight(1*Cam.Zoom);
-      if(State>0){
-          Canvas.fill(State*200,0,255);
-      }else{
-          Canvas.fill(-State*200,0,255);
-      }
-      Canvas.ellipse(Cam.RealToScreenX(Pos.x),Cam.RealToScreenY(Pos.y),Radius*2*Cam.Zoom,Radius*2*Cam.Zoom);
-     }
+     //}else{//Eye
+      
+     //}
   }
 }
 class Eye extends Point{
-  Eye(PVector dPos,PVector dVel,float dMass,float  dFriction){
+  Ray EyeRay;
+  Eye(PVector dPos,PVector dVel,float dMass,float  dFriction,PVector RayDir){
      super(dPos,dVel,dMass,dFriction);
+     EyeRay= new Ray(dPos, RayDir);
+  }
+  
+  void DrawP(Camera Cam,PGraphics Canvas){// Draws Point.
+    Canvas.strokeWeight(1*Cam.Zoom);
+    if(State>0){
+        Canvas.fill(State*200,0,255);
+    }else{
+        Canvas.fill(0,-State*200,255);
+    }
+    Canvas.ellipse(Cam.RealToScreenX(Pos.x),Cam.RealToScreenY(Pos.y),Radius*2*Cam.Zoom,Radius*2*Cam.Zoom);
+    Canvas.strokeWeight(3*Cam.Zoom);
+    Canvas.line(Cam.RealToScreenX(Pos.x),Cam.RealToScreenY(Pos.y),Cam.RealToScreenX(Pos.x+PVsetmag(EyeRay.Dir,Radius).x),Cam.RealToScreenY(Pos.y+PVsetmag(EyeRay.Dir,Radius).y));
+    Canvas.strokeWeight(1.5*Cam.Zoom);
+    Canvas.line(Cam.RealToScreenX(Pos.x),Cam.RealToScreenY(Pos.y),Cam.RealToScreenX(EyeRay.PrevInt.x),Cam.RealToScreenY(EyeRay.PrevInt.y));
+    
+  } 
+  void UpdateP(){// Add eyeray update
+    super.UpdateP();
+    EyeRay.Pos=Pos;//Update raycaster pos
+  }
+  
+  void SetState(Enviroment E){
+    //State=E.InGround(this)? -1:1;
+    State= EyeRay.RayValue(E.BList);
+    //State= Activation(EyeRay.RayValue(E.BList));
   }
 }
 //class Logic extends Point{
@@ -310,6 +332,73 @@ class Nerve{
     }
   }
 }
+class Ray{
+  PVector Pos;
+  PVector Dir;
+  
+  PVector PrevInt;
+  Ray( PVector dPos,PVector dDir){
+    Pos=dPos;
+    Dir=dDir;
+    PrevInt=PVextend(Dir,Float.MAX_VALUE);
+  }
+  
+  boolean Intersects(ArrayList<Barrier> B){
+    for(Barrier b: B){
+       if(Intersects(b)){
+          return true; 
+       }
+    }
+    return false;
+  }
+  PVector IntersectPoint(ArrayList<Barrier> B){
+     float dist=Float.MAX_VALUE;
+     PVector point=new PVector(Float.MAX_VALUE,Float.MAX_VALUE);
+     for(Barrier b: B){
+       if( Intersects(b)){
+         PVector inter= IntersectPoint(b);
+         if(PVmag(inter)<dist){
+            dist= PVmag(inter);
+            point= inter;
+         }
+       } 
+     }
+     PrevInt=point;
+     return point;
+  }
+  float RayLength(ArrayList<Barrier> B){
+     float dist=1000000000;
+     for(Barrier b: B){
+       if( Intersects(b)){
+         PVector inter= IntersectPoint(b);
+         if(PVmag(inter)<dist){
+            dist= PVmag(inter);
+         }
+       } 
+     }
+     return dist;
+  }
+  float RayValue(ArrayList<Barrier> B){
+     PVector inter= IntersectPoint(B);
+     return PVDivide(PVadd(inter,PVminus(Pos)),Dir).x; 
+  }
+  
+  boolean Intersects(Barrier b){
+    PVector relPos= b.RelPos(Pos);
+    PVector relDir= PVDivide(Dir,b.Base);
+    return FLtween(0,1,relPos.x-relPos.y*relDir.x/relDir.y);
+  }
+  float RayLength(Barrier b){
+    return PVmag(IntersectPoint(b));
+  }
+  PVector IntersectPoint(Barrier b){
+    PVector relPos= b.RelPos(Pos);
+    PVector relDir= PVDivide(Dir,b.Base);
+    PVector intersect= new PVector(relPos.x-relPos.y*relDir.x/relDir.y,0);
+    return b.ToPos(intersect);
+  }
+}
+
 class Barrier{// Class for barr
   PVector Corner;
   PVector Base;
@@ -322,6 +411,13 @@ class Barrier{// Class for barr
   Barrier CloneBarrier(){
     return new Barrier(Corner,Base,Bounce,Slide);
   }
+  PVector RelPos(PVector p){// Point -> relative point
+    return PVDivide(PVadd(p,PVextend(Corner,-1)),Base);
+  }
+  PVector ToPos(PVector rel){// Relative Point -> point;
+    return PVadd(PVMult(rel,Base),Corner); 
+  }
+  
   boolean CollidesGiven(Point Po,PVector Posr,PVector Nextr){// Checks if a Point is going to collide this frame.
     float radius=-Po.Radius/PVmag(Base);
     return (((Posr.y>radius)&&(Nextr.y<=radius))||((Posr.y<0)&&(Nextr.y>radius))
@@ -330,8 +426,8 @@ class Barrier{// Class for barr
     (BetweenBarrier(Po,Posr,Nextr));
   }
   boolean Collides(Point Po){
-    PVector Posr=PVDivide(PVadd(Po.Pos,PVextend(Corner,-1)),Base);
-    PVector Nextr=PVDivide(PVadd(Po.NextPos(),PVextend(Corner,-1)),Base);
+    PVector Posr=RelPos(Po.Pos);//PVDivide(PVadd(Po.Pos,PVextend(Corner,-1)),Base);
+    PVector Nextr=RelPos(Po.NextPos());//PVDivide(PVadd(Po.NextPos(),PVextend(Corner,-1)),Base);
     return CollidesGiven(Po,Posr,Nextr);
   }
   boolean BetweenBarrier(Point Po,PVector Posr,PVector Nextr){// checks if the Point is in the middle
@@ -373,8 +469,8 @@ class Barrier{// Class for barr
     //Po.Acc=PVMult(RAcc,Base); 
   }
   void CheckColl(Point Po){// Checks and updates point according to bouncy.
-    PVector Posr=PVDivide(PVadd(Po.Pos,PVextend(Corner,-1)),Base);
-    PVector Nextr=PVDivide(PVadd(Po.NextPos(),PVextend(Corner,-1)),Base);
+    PVector Posr=RelPos(Po.Pos);//PVDivide(PVadd(Po.Pos,PVextend(Corner,-1)),Base);
+    PVector Nextr=RelPos(Po.Pos);//PVDivide(PVadd(Po.NextPos(),PVextend(Corner,-1)),Base);
     PVector Rvel=PVDivide(Po.Vel,Base);
     PVector RAcc=PVDivide(Po.Acc,Base);
     if(CollidesGiven(Po,Posr,Nextr)){

@@ -370,7 +370,7 @@ class Enviroment{
     for(int M=0;M<NumMusc;M++){
       O.GenNewMusc();
     }
-    int NumNeu=randomInt(2,5);
+    int NumNeu=randomInt(3,7);
     for(int N=0;N<NumNeu;N++){
       O.GenNewNeu();
     }

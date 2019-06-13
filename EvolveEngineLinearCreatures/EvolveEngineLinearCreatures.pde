@@ -1,8 +1,8 @@
 import java.util.*;
 //Current enviroment
 Enviroment Env= new Enviroment();
-int NUMORGANISMS=1500;
-int SEED=27;
+int NUMORGANISMS=7000;
+int SEED=30;
 
 //Enviroment handler
 int EnvNumber=0;
@@ -33,13 +33,19 @@ boolean ALAP=false;
 boolean FollowOrg=false;
 boolean OverviewOrgs=true;
 
+
+//NOTEPAD SUIE
+Ray RayCast;
+
 void setup(){
   randomSeed(SEED);
   //Seeds with interesting stuffs
   //size(1280, 720);
   fullScreen();
   frameRate(60);
-  
+  //IHWEiufg
+   RayCast= new Ray(new PVector(0,0),new PVector(1,4));
+   
   //Set up Graphics
   HistoGram=createGraphics(400,200,JAVA2D);
   SpeciesFreq=createGraphics(510,260,JAVA2D);//createGraphics(510,60);
@@ -55,10 +61,10 @@ void setup(){
   Env.SetSummonArea(new PVector(0,100),new PVector(200,200));
   Env.SetLiveArea(new PVector(-1000,-1000),new PVector(20000,1800));
   Env.OList.add(new Organism());
-  Env.OList.get(0).PList.add(new Point(new PVector(100,130),new PVector(0,0),1,0.2,new float[]{1},0,new float[]{0}));
-  Env.OList.get(0).PList.add(new Point(new PVector(200,130),new PVector(0,0),5,0.2,new float[]{1},0,new float[]{0}));
+  Env.OList.get(0).PList.add(new Point(new PVector(100,130),new PVector(0,0),1,0.2,new float[]{10},-5,new float[]{0}));
+  Env.OList.get(0).PList.add(new Point(new PVector(200,130),new PVector(0,0),5,0.2,new float[]{10},-5,new float[]{0}));
   Env.OList.get(0).PList.add(new Point(new PVector(150,80),new PVector(0,0),5,0.2,new float[]{1},0,new float[]{0}));
-  Env.OList.get(0).PList.add(new Eye(new PVector(150,130),new PVector(0,0),5,0.2));
+  Env.OList.get(0).PList.add(new Eye(new PVector(150,130),new PVector(0,0),5,0.2,new PVector(0,40)));
   //Env.OList.get(0).PList.add(new Eye(new PVector(150,130),new PVector(0,0),8));
  // Env.OList.get(0).PList.add(new Logic(new PVector(30,130),new PVector(0,0),1,0,new boolean[]{true}));
   Env.OList.get(0).MList.add(new Muscle(0,1,new float[]{.4,110,.2},new float[]{1,160,.2},new float[]{1},0.5,new float[]{0}));
@@ -155,6 +161,20 @@ void RunMainScreen(PGraphics MainScreen,PGraphics HistoGram,PGraphics SpeciesFre
   MainScreen.beginDraw();
   MainScreen.background(255,255,255);
   Env.DrawBackground(Cam,MainScreen);
+  
+  MainScreen.fill(0);
+  MainScreen.ellipse(Cam.RealToScreenX(RayCast.Pos.x),Cam.RealToScreenY(RayCast.Pos.y),10,10);
+  
+  MainScreen.line(Cam.RealToScreenX(RayCast.Pos.x),Cam.RealToScreenY(RayCast.Pos.y),Cam.RealToScreenX(RayCast.Pos.x+RayCast.Dir.x*10),Cam.RealToScreenY(RayCast.Pos.y+RayCast.Dir.y*10));
+  
+  RayCast.Pos= Cam.ScreenToReal(new PVector(mouseX,mouseY));
+  
+  MainScreen.text(RayCast.RayValue(Env.BList),Cam.RealToScreenX(RayCast.Pos.x),Cam.RealToScreenY(RayCast.Pos.y));
+  if( RayCast.Intersects(Env.BList)){
+    
+    PVector Intersect= RayCast.IntersectPoint(Env.BList);
+    MainScreen.ellipse(Cam.RealToScreenX(Intersect.x),Cam.RealToScreenY(Intersect.y),10,10);
+  }
 
   //Env.UpdateOrg(0);
   // Env.TestList.get(0).PList.get(4).Pos=new PVector(mouseX+Cam.x,mouseY+Cam.y);

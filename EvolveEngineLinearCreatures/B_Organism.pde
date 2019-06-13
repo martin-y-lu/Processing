@@ -68,7 +68,8 @@ class Organism{
      for(int p=0;p<PList.size();p++){// Sets all Inputs given back to 0
       Point P=PList.get(p);
       if(P.Type=="Input"){// If Eye, find state;
-        P.State=E.InGround(P)? -1:1;
+        //P.State=E.InGround(P)? -1:1;
+        ((Eye)P).SetState(E);
       }else{
         P.Inputs=P.UncheckedIn;
         P.InputsUsed=0;
@@ -222,9 +223,13 @@ class Organism{
     }
   }
   void FixSmarts(){//Makes sure weights array is up to size
-     for(int p=0;p<PList.size();p++){// Sets all Inputs given back to 0
+    for(int p=0;p<PList.size();p++){// Sets all Inputs given back to 0
       Point P=PList.get(p);
-      P.InputsUsed=0;
+      //if(P.Type!="Input"){
+        P.InputsUsed=0;
+      //}else{
+      //  P.InputsUsed=1;
+      //}
     }
     for(int m=0;m<MList.size();m++){
       Muscle M=MList.get(m);
@@ -260,9 +265,13 @@ class Organism{
     }
   }
   void FixNewOrg(){
-      for(int p=0;p<PList.size();p++){// Sets all Inputs given back to 0
+    for(int p=0;p<PList.size();p++){// Sets all Inputs given back to 0
       Point P=PList.get(p);
-      P.InputsUsed=0;
+      //if(P.Type!="Input"){
+        P.InputsUsed=0;
+      //}else{
+      //  P.InputsUsed=1;
+      //}
     }
     for(int m=0;m<MList.size();m++){
       Muscle M=MList.get(m);
@@ -311,7 +320,10 @@ class Organism{
   }
   void GenNewEye(){
      PVector Position=new PVector(random(E.SummonPos.x,E.SummonPos.x+E.SummonRect.x),random(E.SummonPos.y,E.SummonPos.y+E.SummonRect.y));
-     PList.add(new Eye(Position,new PVector(0,0),1,0));
+     float len= random(40,80);
+     float ang= random(0,TWO_PI);
+     PVector Dir= new PVector(len*cos(ang),len*sin(ang));
+     PList.add(new Eye(Position,new PVector(0,0),1,0,Dir));
   }
   
   void RemovePoi(int N){//Removes given point without ruining Nerves and Muscles
@@ -374,6 +386,10 @@ class Organism{
     }
     if(Poi.Friction>1){
      Poi.Friction=1;
+    }
+    if (Poi.Type.equals("Input")){
+      PVector mult=new PVector(random(0.9,1.1),random(-0.2,0.2));
+      ((Eye)Poi).EyeRay.Dir=PVMult(((Eye)Poi).EyeRay.Dir,mult);
     }
   }
   
