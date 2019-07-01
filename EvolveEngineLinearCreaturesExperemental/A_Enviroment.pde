@@ -187,7 +187,7 @@ class Enviroment{
     return Percentile;
   }
   void ShiftToTest(int N){
-    TestList.add(new Tester(OList.get(N).CloneOrganism(),this,15*60));
+    TestList.add(new Tester(OList.get(N).CloneOrganism(),this,RUNTIME*60));
   }
   void ReshiftToTest(){
     TestList.clear();
@@ -224,6 +224,29 @@ class Enviroment{
       Org.MutateOrg();
     }
   }
+  int RelatedPopulation(int[] Num){//Population of organism with symmilar numbers/ structure
+     int popSize=0;
+       int poiDiff=0;
+       int eyeDiff=1;
+       int muscDiff=3;
+       int neuDiff=5;
+       for(int p=Num[0]-poiDiff;p<Num[0]+poiDiff+1;p++){
+         for(int e=Num[1]-eyeDiff;e<Num[1]+eyeDiff+1;e++){
+            for(int m=Num[2]-muscDiff;m<Num[2]+muscDiff+1;m++){
+               for(int n=Num[3]-neuDiff;n<Num[3]+neuDiff+1;n++){
+                   if(SpeciesAbundanceDict.containsKey(SpeciesName(new int[]{p,e,m,n}))){
+                       popSize+=SpeciesAbundanceDict.get(SpeciesName(new int[]{p,e,m,n}));
+                   }    
+               }
+            }
+         }
+       }
+      return popSize;
+  }
+  int RelatedPopulation(String Name){//Population of organism with symmilar numbers/ structure
+    return RelatedPopulation(SpeciesNum(Name));
+  }
+  
   void Trim(float frac){
     //int PrevSize=OList.size();
     //int cutPoint=round(PrevSize*frac);
@@ -282,10 +305,17 @@ class Enviroment{
     //  OList.remove(OList.size()-1);
     //}
     
-    float Trim=0.1;
+    float Trim=0.2;
     float Power=0.1;
-    float SurvFract=0.90;
+    float SurvFract=0.9;
     float Multiplier=SurvFract*(Power+1)/pow(1-Trim,Power+1);
+    for(int i= TestList.size()-1;i>=0;i--){
+      if(TestList.get(i).Fitness==0){
+        TestList.remove(i);
+      } 
+    }
+    
+    
     Trim(1-Trim);
     int PrevSize=TestList.size()-1;
     for(int i=0; i<PrevSize;i++){
@@ -295,8 +325,16 @@ class Enviroment{
       if(SpeciesAbundanceDict.containsKey(TestList.get(i).O.Name())){
          PopSize=SpeciesAbundanceDict.get(TestList.get(i).O.Name());
       }
-     
-      numOffspring*=min(1.0,pow(PopSize/100,-0.5));
+      int RelPopSize=RelatedPopulation(TestList.get(i).O.Name());
+      if(RelPopSize==0){
+         RelPopSize=1; 
+      }
+      
+      if(random(1)<(0.02-pow(rank,3))*0.02){
+        TestList.get(i).MutateTester();
+      }
+      numOffspring*=min(1.0,pow(PopSize/(NUMORGANISMS*0.05),-0.5));
+      numOffspring*=min(1.0,pow(RelPopSize/(NUMORGANISMS*0.2),-1));
       for(int j=0; j<numOffspring;j++){
         TestList.add(TestList.get(i).ReproduceTester());
       }
@@ -346,7 +384,7 @@ class Enviroment{
     println("Population after reproduce "+ OList.size());
     //Insure size
     while(TestList.size()<NumOrganisms){
-        TestList.add(new Tester(NewOrg(),this,15*60));
+        TestList.add(new Tester(NewOrg(),this,RUNTIME*60));
     }  
     while(TestList.size()>NumOrganisms){
         TestList.remove(NumOrganisms-1);//randomInt(0,TestList.size()-1));
@@ -371,7 +409,7 @@ class Enviroment{
     for(int M=0;M<NumMusc;M++){
       O.GenNewMusc();
     }
-    int NumNeu=randomInt(3,11);
+    int NumNeu=randomInt(3,NumPois+1);
     for(int N=0;N<NumNeu;N++){
       O.GenNewNeu();
     }
@@ -489,7 +527,7 @@ class Tester implements Comparable<Tester>{
   //Historical Info
   float ParentFitness=20;
   
-  float RunTime=60*90;
+  float RunTime=60*RUNTIME;
   boolean Finalized=false;
   float Fitness=100;
   Tester(Organism dO,Enviroment dE,float dRunTime){
@@ -515,6 +553,11 @@ class Tester implements Comparable<Tester>{
     Tester Clone=new Tester(Org,E,RunTime);
     Clone.ParentFitness=EvaluateSkill();
     return Clone;
+  }
+  void MutateTester(){
+    ParentFitness=EvaluateSkill();
+    OOriginal.MutateOrg();
+    Reset();
   }
   void Reset(){
     O= OOriginal.CloneOrganism();

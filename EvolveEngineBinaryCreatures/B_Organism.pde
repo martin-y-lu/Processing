@@ -20,7 +20,7 @@ class Organism{
   ArrayList<Point> PList= new ArrayList<Point>();
   ArrayList<Muscle> MList=new ArrayList<Muscle>();
   ArrayList<Neuron> NList=new ArrayList<Neuron>();
-  float MuteAmount=0.1;//The rate of mutation for the organism
+  float MuteAmount=0.01;//The rate of mutation for the organism
   Enviroment E;// Enviroment given to Organism . Organisms can exist without them but dont really function
   /* Essencial functions- Makes the organism run.
      These things do all of the updadating, calculating,displaying, and so on in a organism. 

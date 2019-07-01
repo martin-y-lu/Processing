@@ -1,5 +1,5 @@
 Preferences: Row 1- Logic type, Row 2- Position, Row 3-Connection number, row 4- States
 Button:Button
-130.0,67.0:131.0,158.0
+50.0,100.0:50.0,200.0
 :
 T:T

@@ -1,8 +1,9 @@
 import java.util.*;
 //Current enviroment
 Enviroment Env= new Enviroment();
-int NUMORGANISMS=7000;
-int SEED=30;
+int NUMORGANISMS=1000;
+float RUNTIME=18;//Seconds
+int SEED=25;
 
 //Enviroment handler
 int EnvNumber=0;
@@ -35,7 +36,7 @@ boolean OverviewOrgs=true;
 
 
 //NOTEPAD SUIE
-//Ray RayCast;
+Ray RayCast;
 
 void setup(){
   randomSeed(SEED);
@@ -44,7 +45,7 @@ void setup(){
   fullScreen();
   frameRate(60);
   //IHWEiufg
-   //RayCast= new Ray(new PVector(0,0),new PVector(1,4));
+   RayCast= new Ray(new PVector(0,0),new PVector(-50,10));
    
   //Set up Graphics
   HistoGram=createGraphics(400,200,JAVA2D);
@@ -79,7 +80,7 @@ void setup(){
     Env.OList.get(0).PList.add(new Point(new PVector(100,130),new PVector(0,0),1,0.2,new float[]{},-5,new float[]{}));
   Env.OList.get(0).PList.add(new Point(new PVector(200,130),new PVector(0,0),5,0.2,new float[]{},-5,new float[]{}));
   Env.OList.get(0).PList.add(new Point(new PVector(150,80),new PVector(0,0),5,0.2,new float[]{},0,new float[]{}));
-  Env.OList.get(0).PList.add(new Eye(new PVector(150,130),new PVector(0,0),5,0.2,new PVector(0,40)));
+  Env.OList.get(0).PList.add(new Eye(new PVector(150,130),new PVector(0,0),5,0.2,new PVector(0,40),20,0));
   //Env.OList.get(0).PList.add(new Eye(new PVector(150,130),new PVector(0,0),8));
  // Env.OList.get(0).PList.add(new Logic(new PVector(30,130),new PVector(0,0),1,0,new boolean[]{true}));
   Env.OList.get(0).MList.add(new Muscle(0,1,new float[]{.4,110,.2},new float[]{1,160,.2},new float[]{},0.5,new float[]{}));
@@ -126,24 +127,52 @@ void setup(){
  Env.BList.add(new Barrier(new PVector(-300,300),new PVector(2000+4000,0),.2,.05));
  
  //Gaps
-  //int init=200;
-  //int size=140;
-  //int gap=20;
-  //int depth=2;
+  //int init=400;
+  //int size=200;
+  //int gap=30;
+  //int depth=10;
   // Env.BList.add(new Barrier(new PVector(-800,300),new PVector(800+init,0),.2,.05));
-  //Env.BList.add(new Barrier(new PVector(init,300),new PVector(0,500),.2,.05));
-  //while( init<4000){
+  //Env.BList.add(new Barrier(new PVector(init,300),new PVector(0,depth),.2,.05));
+  //while( init<2500){
+    
   //   Env.BList.add(new Barrier(new PVector(init,300+depth),new PVector(gap,0),.2,.05));
   //   init+=gap;
   //  Env.BList.add(new Barrier(new PVector(init,300),new PVector(size,0),.2,.05));
   //  Env.BList.add(new Barrier(new PVector(init,300+depth),new PVector(0,-depth),.2,.05));
      
   //  depth+=(int)(gap*0.1);
+  //   depth+=25; 
+    
   //   Env.BList.add(new Barrier(new PVector(init+size,300),new PVector(0,depth),.2,.05));
   //  init+=size;
-  //  gap+=7;
-  //  size+=8;
+  //  gap+=20;
+  //  size+=50;
+  //  if(size>300){
+  //    size=300; 
+  //  }
+  //}
+  
+  //Hurdles
+  //int init=400;
+  //int size=300;
+  //int Width=30;
+  //int Height=10;
+  //Env.BList.add(new Barrier(new PVector(-800,300),new PVector(800+init,0),.2,.05));
+  //Env.BList.add(new Barrier(new PVector(init,300),new PVector(0,-Height),.2,.05));
+  //while( init<2500){
     
+  //   Env.BList.add(new Barrier(new PVector(init,300-Height),new PVector(Width,0),.2,.05));
+  //   init+=Width;
+  //  Env.BList.add(new Barrier(new PVector(init,300),new PVector(size,0),.2,.05));
+  //  Env.BList.add(new Barrier(new PVector(init,300-Height),new PVector(0,Height),.2,.05));
+     
+  //  Height+=10;
+  //  if(Height>50){
+  //   Height=50;
+  //  }
+    
+  //  Env.BList.add(new Barrier(new PVector(init+size,300),new PVector(0,-Height),.2,.05));
+  //  init+=size;
   //}
   
   ////Climb
@@ -166,6 +195,10 @@ void setup(){
   //  Y+=jumpY;
   //}
   
+  
+  for(int i=0;i<50;i++){
+   println(abs(round(1*randomGaussian()*1.6))); 
+  }
 }
 
 
@@ -176,19 +209,7 @@ void RunMainScreen(PGraphics MainScreen,PGraphics HistoGram,PGraphics SpeciesFre
   MainScreen.background(255,255,255);
   Env.DrawBackground(Cam,MainScreen);
   
-  //MainScreen.fill(0);
-  //MainScreen.ellipse(Cam.RealToScreenX(RayCast.Pos.x),Cam.RealToScreenY(RayCast.Pos.y),10,10);
-  
-  //MainScreen.line(Cam.RealToScreenX(RayCast.Pos.x),Cam.RealToScreenY(RayCast.Pos.y),Cam.RealToScreenX(RayCast.Pos.x+RayCast.Dir.x*10),Cam.RealToScreenY(RayCast.Pos.y+RayCast.Dir.y*10));
-  
-  //RayCast.Pos= Cam.ScreenToReal(new PVector(mouseX,mouseY));
-  
-  //MainScreen.text(RayCast.RayValue(Env.BList),Cam.RealToScreenX(RayCast.Pos.x),Cam.RealToScreenY(RayCast.Pos.y));
-  //if( RayCast.Intersects(Env.BList)){
-    
-  //  PVector Intersect= RayCast.IntersectPoint(Env.BList);
-  //  MainScreen.ellipse(Cam.RealToScreenX(Intersect.x),Cam.RealToScreenY(Intersect.y),10,10);
-  //}
+ 
 
   //Env.UpdateOrg(0);
   // Env.TestList.get(0).PList.get(4).Pos=new PVector(mouseX+Cam.x,mouseY+Cam.y);
@@ -238,10 +259,32 @@ void RunMainScreen(PGraphics MainScreen,PGraphics HistoGram,PGraphics SpeciesFre
   }else{
     MainScreen.textSize(24*Cam.Zoom/0.6);
   }
+  
+  //Numbers
   for(float i=Cam.CamPos.x-100;i<Cam.CamPos.x+width/Cam.Zoom;i+=100){
     i= ceil(i/100.0)*100; //round up 100
+    
+    MainScreen.stroke(0);
+    MainScreen.strokeWeight(1);
     MainScreen.line(Cam.RealToScreenX(i),height,Cam.RealToScreenX(i),height-50);
     MainScreen.text(floor(i/100),Cam.RealToScreenX(i)+5,height-30);
+  }
+  
+  
+  
+  
+   MainScreen.fill(0);
+  MainScreen.ellipse(Cam.RealToScreenX(RayCast.Pos.x),Cam.RealToScreenY(RayCast.Pos.y),10,10);
+  
+  MainScreen.line(Cam.RealToScreenX(RayCast.Pos.x),Cam.RealToScreenY(RayCast.Pos.y),Cam.RealToScreenX(RayCast.Pos.x+RayCast.Dir.x),Cam.RealToScreenY(RayCast.Pos.y+RayCast.Dir.y));
+  
+  RayCast.Pos= Cam.ScreenToReal(new PVector(mouseX,mouseY));
+  
+  MainScreen.text(RayCast.RayValue(Env.BList),Cam.RealToScreenX(RayCast.Pos.x),Cam.RealToScreenY(RayCast.Pos.y));
+  if( RayCast.Intersects(Env.BList)){
+    
+    PVector Intersect= RayCast.IntersectPoint(Env.BList);
+    MainScreen.ellipse(Cam.RealToScreenX(Intersect.x),Cam.RealToScreenY(Intersect.y),10,10);
   }
   MainScreen.endDraw();
   //tint(255,255);
@@ -403,9 +446,9 @@ void RunMainScreen(PGraphics MainScreen,PGraphics HistoGram,PGraphics SpeciesFre
   
   ///_____________________________________________________________________________________________
   //Panel buttons
-  PVector PanelPos=new PVector(105,140);//new PVector(105,110);
+  PVector PanelPos=new PVector(105,160);//new PVector(105,110);
   fill(255);
-  rect(PanelPos.x-5,PanelPos.y,510,60);
+  rect(PanelPos.x-5,PanelPos.y-20,510,80);
   Button Previous= new Button(new PVector(PanelPos.x+15,PanelPos.y+30),new PVector(60,20),"Previous");
   if(CurrentTestDisplay>0){
      //new Button(new PVector(120,140),new PVector(60,20),"Previous").Display();
@@ -433,6 +476,11 @@ void RunMainScreen(PGraphics MainScreen,PGraphics HistoGram,PGraphics SpeciesFre
     }
   }
   fill(SpeciesColor(Env.OList.get(CurrentTestDisplay).SpeciesNumber()));//Glitcgung
+  if(Env.SpeciesAbundanceDict.containsKey(Env.OList.get(CurrentTestDisplay).Name())){
+         text("Current Species Pop:"+Env.SpeciesAbundanceDict.get(Env.OList.get(CurrentTestDisplay).Name()),PanelPos.x,PanelPos.y-20);
+  }
+  text("Current Species Related Pop:"+Env.RelatedPopulation(Env.OList.get(CurrentTestDisplay).Name()),PanelPos.x+180,PanelPos.y-20);
+  
   text("Current Species-"+SpeciesName(Env.OList.get(CurrentTestDisplay).SpeciesNumber()),PanelPos.x,PanelPos.y);
   text("Mutability-"+nf(Env.OList.get(CurrentTestDisplay).MuteAmount,1,2),190+PanelPos.x,PanelPos.y);
   text("Fitness-"+floor( Env.TestList.get(CurrentTestDisplay).EvaluateSkill()),300+PanelPos.x,PanelPos.y);
@@ -478,7 +526,8 @@ void RunMainScreen(PGraphics MainScreen,PGraphics HistoGram,PGraphics SpeciesFre
   Button Mutate=new Button(new PVector(175+PanelPos.x,PanelPos.y+30),new PVector(60,20),"Mutate");
   Mutate.Display(255);
   if(Mutate.IsPressed()){
-      Env.OList.get(CurrentTestDisplay).MutateOrg();
+      //Env.OList.get(CurrentTestDisplay).MutateOrg();
+      Env.TestList.get(CurrentTestDisplay).MutateTester();
       Env.TestList.get(CurrentTestDisplay).Reset();
       //Tester T=Env.TestList.get(CurrentTestDisplay);
       ////T=new Tester(Env.OList.get(CurrentTestDisplay).CloneOrganism(),Env,60*30);
@@ -546,6 +595,7 @@ void RunMainScreen(PGraphics MainScreen,PGraphics HistoGram,PGraphics SpeciesFre
   }
   if(Alap.IsPressed()){
     ALAP=!ALAP;
+    OverviewOrgs=true;
   }
   Button ScriptTest =new Button(new PVector(415+PanelPos.x,70+PanelPos.y),new PVector(60,20),"(SCRIPTY GARBAG)");
   ScriptTest.Display(255);
@@ -579,6 +629,10 @@ void RunMainScreen(PGraphics MainScreen,PGraphics HistoGram,PGraphics SpeciesFre
     //Env.ReshiftToTest();
     //print(Env.SpeciesAbundance());
   }
+  
+  
+  
+  
 }
 void draw(){
   if(ScreenNumber==0){
@@ -596,5 +650,6 @@ void mouseClicked(){
   //Env.ShiftToTest(2);
   if(ALAP&&!PrevMouse){
    ALAP=false;
+   OverviewOrgs=false;
   }
 }

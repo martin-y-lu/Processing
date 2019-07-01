@@ -68,8 +68,8 @@ class Organism{
      for(int p=0;p<PList.size();p++){// Sets all Inputs given back to 0
       Point P=PList.get(p);
       if(P.Type=="Input"){// If Eye, find state;
-        P.State=E.InGround(P)? -1:1;
-        //((Eye)P).SetState(E);
+        //P.State=E.InGround(P)? -1:1;
+        ((Eye)P).SetState(E);
       }else{
         P.Inputs=P.UncheckedIn;
         P.InputsUsed=0;
@@ -121,7 +121,7 @@ class Organism{
     }
     for(int p=0;p<PList.size();p++){
       Point Poi=PList.get(p);
-      if(Poi.Type!="Input"){
+      if(Poi.Type!="Input"){// I DONT CAL IT EXPEREMENTAL FOR NOTHING
         //for(int num=0;(E.NumColliding(Poi)>0)&&(num<=E.NumColliding(Poi)+2);num++){// RUNS THROU BARRIERS, checks if any is colliding or too many are colliding
           //if(num>E.NumColliding(Poi)+1){
           //  Poi.Acc=new PVector(0,0);//STABLEISE
@@ -177,16 +177,17 @@ class Organism{
     return Org;
   }
   void MutateOrg(){
-    MuteAmount+=randomGaussian()*0.03;
-    int NumPoiRemoved=abs(round(MuteAmount*randomGaussian()*0.2));
+    MuteAmount+=randomGaussian()*0.06;
+    int NumPoiRemoved=abs(round(MuteAmount*randomGaussian()*0.25));
     for(int r=0;r<NumPoiRemoved;r++){
       if(PList.size()>0){
         RemovePoi(randomInt(0,PList.size()-1));
       }
     }
-    int NumPoiAdded=abs(round(MuteAmount*randomGaussian()*0.2));
+    int NumPoiAdded=abs(round(MuteAmount*randomGaussian()*0.25));
     for(int a=0;a<NumPoiAdded;a++){
-      AddNewPoi();
+      //AddNewPoi();
+      AddNewConnectedPoi();
     }
     int NumMuscRemoved=abs(round(MuteAmount*randomGaussian()*0.25));
     for(int rm=0;rm<NumMuscRemoved;rm++){
@@ -194,7 +195,7 @@ class Organism{
         RemoveMusc(randomInt(0,MList.size()-1));
       }
     }
-    int NumMuscAdded=abs(round(MuteAmount*randomGaussian()*0.27));
+    int NumMuscAdded=abs(round(MuteAmount*randomGaussian()*0.3));
     for(int am=0;am<NumMuscAdded;am++){
       AddNewMusc();
     }
@@ -313,7 +314,7 @@ class Organism{
   
   void GenNewPoi(){ //Generates and adds a random new Point.
       PVector Position=new PVector(random(E.SummonPos.x,E.SummonPos.x+E.SummonRect.x),random(E.SummonPos.y,E.SummonPos.y+E.SummonRect.y));
-      PList.add(new Point(Position,new PVector(0,0),6,0.2,new float[]{},randomGaussian()*15,new float[]{}));
+      PList.add(new Point(Position,new PVector(0,0),6,0.25+randomGaussian()*0.08,new float[]{},randomGaussian()*15,new float[]{}));
   }
   void AddNewPoi(){ ////Generates and adds a random new Point.
     if(random(1)>0.2){// 1 in 5 are eyes
@@ -322,12 +323,58 @@ class Organism{
       GenNewEye();
     }
   }
+  void AddNewConnectedPoi(){//Generated and ads a random new point with connections to others.
+      if(random(1)>0.2){// 1 in 5 are eyes
+        GenNewPoi();
+      }else{
+        GenNewEye();
+      }
+      int PoiA=PList.size()-1;
+      int numMusc=abs(round(MuteAmount*randomGaussian()*2.2));
+      if(numMusc<PList.size()-1){
+       for(int i=0;i<numMusc;i++){
+         int PoiB=randomInt(0,PList.size()-2);
+         while((PoiA==PoiB)||(MuscInOrg(PoiA,PoiB))){
+           PoiB=randomInt(0,PList.size()-2);
+         }
+         MList.add(new Muscle(PoiA,PoiB,new float[]{random(0,0.3),random(50,200),0.7},new float[]{random(0,0.3),random(50,200),0.7},new float[]{},randomGaussian()*15,new float[]{}));
+         MList.get(MList.size()-1).O=this;
+         MList.get(MList.size()-1).SetPois();
+       }
+     }
+      
+     int numNeu=abs(round(MuteAmount*randomGaussian()*1.2));
+     if(numNeu<PList.size()-1+MList.size()){
+       for(int i=0;i<numNeu;i++){
+         int PoiB=randomInt(0,PList.size()+MList.size()-1);
+         boolean Last=false;
+         if(PoiB<=PList.size()-1){}else{
+           Last=true;
+           PoiB-=PList.size();
+         }
+         while(NeuInOrg(PoiA,Last,PoiB)
+         ||((Last==false)&&((PoiA==PoiB)||(PList.get(PoiB) instanceof Eye)))
+         ){
+           PoiA=randomInt(0,PList.size()-1);
+           PoiB=randomInt(0,PList.size()+MList.size()-1);
+           Last=false;
+           if(PoiB<=PList.size()-1){}else{
+             Last=true;
+             PoiB-=PList.size();
+           }
+         }
+         NList.add(new Nerve(PoiA,Last,PoiB,randomInt(1,60)));
+         NList.get(NList.size()-1).C=this;
+         NList.get(NList.size()-1).SetPois();
+       }
+     }
+  }
   void GenNewEye(){
      PVector Position=new PVector(random(E.SummonPos.x,E.SummonPos.x+E.SummonRect.x),random(E.SummonPos.y,E.SummonPos.y+E.SummonRect.y));
      float len= random(40,80);
-     float ang= random(0,TWO_PI);
+     float ang=random(0,TWO_PI);
      PVector Dir= new PVector(len*cos(ang),len*sin(ang));
-     PList.add(new Eye(Position,new PVector(0,0),1,0,Dir));
+     PList.add(new Eye(Position,new PVector(0,0),1,0,Dir,randomGaussian()*8,randomGaussian()*13));
   }
   
   void RemovePoi(int N){//Removes given point without ruining Nerves and Muscles
@@ -368,8 +415,11 @@ class Organism{
   void MutatePoi(int N){
     //float MuteAmount=0.3;
     Point Poi= PList.get(N);
-    Poi.MutateSmart(MuteAmount);
-    
+    if(Poi.Type.equals("Input")){
+      Poi.MutateSmart(MuteAmount*2.0);
+    }else{
+      Poi.MutateSmart(MuteAmount);
+    }
     PVector Rand=new PVector(MuteAmount*randomGaussian()/2,MuteAmount*randomGaussian()/2);
     Poi.Pos=PVadd(Poi.Pos,Rand);
     if(Poi.Pos.x<E.SummonPos.x){
@@ -384,16 +434,24 @@ class Organism{
     if(Poi.Pos.y>E.SummonPos.y+E.SummonRect.y){
       Poi.Pos.y=E.SummonPos.y+E.SummonRect.y;
     }
-    Poi.Friction+=MuteAmount*randomGaussian()*0.01;
+    Poi.Friction+=MuteAmount*randomGaussian()*0.015;
     if(Poi.Friction<0.2){
      Poi.Friction=0.2; 
     }
-    if(Poi.Friction>1){
-     Poi.Friction=1;
+    if(Poi.Friction>0.7){
+     Poi.Friction=0.7;
     }
     if (Poi.Type.equals("Input")){
-      PVector mult=new PVector(random(0.9,1.1),random(-0.2,0.2));
-      ((Eye)Poi).EyeRay.Dir=PVMult(((Eye)Poi).EyeRay.Dir,mult);
+      //PVector mult=new PVector(random(1.0-0.05*MuteAmount,1.0+0.05*MuteAmount),random(0.05*MuteAmount,-0.05*MuteAmount));
+      PVector mult=new PVector(1.0+randomGaussian()*0.06*MuteAmount,randomGaussian()*0.06*MuteAmount);
+      PVector dir=((Eye)Poi).EyeRay.Dir;
+      ((Eye)Poi).EyeRay.Dir=PVMult(dir,mult);
+      if (PVmag(dir)>100){
+         ((Eye)Poi).EyeRay.Dir=PVsetmag( dir,100);
+      }
+      if( PVmag(dir)<50 ){
+        ((Eye)Poi).EyeRay.Dir=PVsetmag( dir,50);
+      }
     }
   }
   
