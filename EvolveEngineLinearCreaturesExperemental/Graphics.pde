@@ -132,7 +132,7 @@ void FillHisto(PGraphics HistoGram){
     HistoGram.stroke(0);
     HistoGram.strokeWeight(2);
     HistoGram.rect(0,0,HistoGram.width,HistoGram.height);
-    HistoGram.strokeWeight(1);
+    HistoGram.strokeWeight(1.5);
     //HistoGram.fill(SpeciesColor(Env.OList.get(CurrentTestDisplay).SpeciesNumber()));
     //HistoGram.rect(100,100,20,20);
     PVector BottomLeft= new PVector(20,HistoGram.height-20);
@@ -140,6 +140,25 @@ void FillHisto(PGraphics HistoGram){
     float Height=HistoGram.height-40;
     float VertScale=Height/maxPercent;
     HistoGram.line(20,HistoGram.height-20,HistoGram.width-20,HistoGram.height-20);
+    HistoGram.strokeWeight(1);
+    for(int r=0;r<200;r+=5){
+      if((r%20)==0){
+        HistoGram.stroke(0,40);
+      }else{
+        HistoGram.stroke(0,18);
+      }
+      HistoGram.line(20,HistoGram.height-20-VertScale*r,HistoGram.width-20,HistoGram.height-20-VertScale*r);
+    }
+    for(int c=0;c< Percentile.length;c+=20){
+      if((c%20)==0){
+        HistoGram.stroke(0,18);
+      }else{
+        HistoGram.stroke(0,8);
+      }
+      PVector Bottom= PVlerp(BottomLeft,BottomRight,float(c)/float(Percentile.length));
+      HistoGram.line(Bottom.x,Bottom.y,Bottom.x,0);
+    }
+    
     for(int i=0; i< Percentile.length;i++){
       PVector Bottom= PVlerp(BottomLeft,BottomRight,float(i)/float(Percentile.length));
       //HistoGram.stroke(0);
@@ -157,7 +176,8 @@ void FillHisto(PGraphics HistoGram){
       //HistoGram.line(Bottom.x,Bottom.y,Bottom.x,Bottom.y-float(Percentile[i])*VertScale);
       //HistoGram.fill(0);
       //HistoGram.textSize(10);
-      if(((i+lowerIndex)*divSize/100)%1==0){
+      int mod=ceil(((float)Percentile.length)/800.0);
+      if(((i+lowerIndex)*divSize/100)%mod==0){
          HistoGram.fill(0);
         HistoGram.text(nf((i+lowerIndex)*divSize/100,0,0),Bottom.x,Bottom.y+15);
       }

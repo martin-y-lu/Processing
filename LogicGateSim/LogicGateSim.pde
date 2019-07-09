@@ -39,8 +39,7 @@ boolean KeyPressed=false;
 PShape Or;
 PShape And;
 PShape Not;
-ArrayList<Logic> Gates=new ArrayList<Logic>();
-ArrayList<Logic> Select=new ArrayList<Logic>();
+ArrayList<Logic> dGates=new ArrayList<Logic>();
 boolean wait=false;
 char prevPress;
 
@@ -51,6 +50,34 @@ char prevPress;
 
 //PGraphics Window; 
 ArrayList<Window> Windows=new ArrayList<Window>();
+void SetActiveWindow(){
+  for(int i=0;i<Windows.size();i++){
+      Windows.get(i).Active=false;
+  } //<>//
+  for(int i=Windows.size()-1;i>=0;i--){
+    if(Windows.get(i).MouseIn()){
+       Windows.get(i).Active=true;
+       break;
+    }
+  }
+}
+
+ArrayList<Component> Components= new ArrayList<Component>();
+void FixAllComponents(){
+   for(int i=0;i<E.Gates.size();i++){
+      if(Components.get(i) instanceof Component){
+        Component C=(Component)E.Gates.get(i);
+        C.FixComponent();
+      }
+    }
+}
+void AddNewComponent(Component C){
+    C.Number=Components.size();
+    Components.add((Component)C.clone());
+}
+//ArrayList<Component> AddableComponents(ArrayList<Logic> Gates){// By refference
+  
+//}
 //Window W;
 Editor E;
 void setup(){          
@@ -105,8 +132,8 @@ void setup(){
     
     
   //  if(true){
-      Gates.add(new Button(new PVector(50,100),true));
-      Gates.add(new Button(new PVector(50,200),true));
+      dGates.add(new Button(new PVector(50,100),true));
+      dGates.add(new Button(new PVector(50,200),true));
       //Gates.add(new OrGate(new PVector(200,100)));
       //Gates.add(new AndGate(new PVector(200,200)));
       //Gates.add(new NotGate(new PVector(300,200)));
@@ -117,13 +144,13 @@ void setup(){
       //Gates.get(4).InFeed=new Logic[]{Gates.get(3)};
       //Gates.get(5).InFeed=new Logic[]{Gates.get(4)};
       //Gates.get(6).InFeed=new Logic[]{Gates.get(2)};
-      for(int i=0;i<Gates.size();i++){
-         for(int j=0;j<((Gate)Gates.get(i)).InpPos.length;j++){
-           Gates.get(i).InFeedIndexes[j]=0;
+      for(int i=0;i<dGates.size();i++){
+         for(int j=0;j<((Gate)dGates.get(i)).InpPos.length;j++){
+           dGates.get(i).InFeedIndexes[j]=0;
          }
       }
-      E=new Editor(Gates);
-      Windows.add( new Window(new PVector(100,100),new PVector(800,400),"Test Window",E));
+      E=new Editor(dGates);
+      Windows.add( new EditorWindow(new PVector(100,100),new PVector(800,400),"Main Window",E));
       //Windows.add( new Window(new PVector(200,200),new PVector(800,400),"Test Window",E));
       //Window=createGraphics(500,200,JAVA2D);
 
@@ -148,6 +175,7 @@ void draw(){
   //W.Update();
   //W.Draw();
   //W.Interact();
+  SetActiveWindow();
   for(int i=0;i<Windows.size();i++){
     Windows.get(i).Run();
   }

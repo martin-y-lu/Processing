@@ -1,9 +1,9 @@
 import java.util.*;
 //Current enviroment
 Enviroment Env= new Enviroment();
-int NUMORGANISMS=1000;
-float RUNTIME=18;//Seconds
-int SEED=25;
+int NUMORGANISMS=5000;
+float RUNTIME=15;//Seconds
+int SEED=108;
 
 //Enviroment handler
 int EnvNumber=0;
@@ -80,7 +80,9 @@ void setup(){
     Env.OList.get(0).PList.add(new Point(new PVector(100,130),new PVector(0,0),1,0.2,new float[]{},-5,new float[]{}));
   Env.OList.get(0).PList.add(new Point(new PVector(200,130),new PVector(0,0),5,0.2,new float[]{},-5,new float[]{}));
   Env.OList.get(0).PList.add(new Point(new PVector(150,80),new PVector(0,0),5,0.2,new float[]{},0,new float[]{}));
-  Env.OList.get(0).PList.add(new Eye(new PVector(150,130),new PVector(0,0),5,0.2,new PVector(0,40),20,0));
+  ArrayList<PVector> EyeDir=new ArrayList<PVector>();
+  EyeDir.add(new PVector(40,20));
+  Env.OList.get(0).PList.add(new Eye(new PVector(150,130),new PVector(0,0),5,0.2,EyeDir,new float[]{20},0));
   //Env.OList.get(0).PList.add(new Eye(new PVector(150,130),new PVector(0,0),8));
  // Env.OList.get(0).PList.add(new Logic(new PVector(30,130),new PVector(0,0),1,0,new boolean[]{true}));
   Env.OList.get(0).MList.add(new Muscle(0,1,new float[]{.4,110,.2},new float[]{1,160,.2},new float[]{},0.5,new float[]{}));
@@ -105,30 +107,19 @@ void setup(){
   Env.OList.get(1).NList.add(new Nerve(1,true,2,15));
   Env.OList.get(1).NList.add(new Nerve(2,true,0,15));
   Env.OList.get(1).SetVars();
-  
-  Env.OList.add(new Organism());
-  Env.OList.get(2).PList.add(new Point(new PVector(150,0-500),new PVector(0,0),1,0.2,new float[]{1},0,new float[]{0}));
-  Env.OList.get(2).PList.add(new Point(new PVector(0,0-500),new PVector(0,0),1,0.2,new float[]{1},0,new float[]{0}));
-  Env.OList.get(2).PList.add(new Point(new PVector(0,0-500),new PVector(0,0),1,0.2,new float[]{1},0,new float[]{0}));
-  Env.OList.get(2).PList.add(new Point(new PVector(0,150-500),new PVector(0,0),1,0.2,new float[]{1},0,new float[]{0}));
-  Env.OList.get(2).MList.add(new Muscle(0,1,new float[]{.4,110,0.2},new float[]{1,160,.2},new float[]{1},0,new float[]{0}));
-  Env.OList.get(2).MList.add(new Muscle(2,3,new float[]{.4,110,0.2},new float[]{1,160,.2},new float[]{1},0,new float[]{0}));
-  Env.OList.get(2).SetVars();
-  //Env.GenNewOrg();
  
   //Env.BList.add(new Barrier(new PVector(-2000,300),new PVector(10000,0),.2,.1));
   
   Env.SetVars();
   Env.ShiftToTest(0);
   Env.ShiftToTest(1);
-  Env.ShiftToTest(2);
  
  //Flat
  Env.BList.add(new Barrier(new PVector(-300,300),new PVector(2000+4000,0),.2,.05));
  
  //Gaps
   //int init=400;
-  //int size=200;
+  //int size=250;
   //int gap=30;
   //int depth=10;
   // Env.BList.add(new Barrier(new PVector(-800,300),new PVector(800+init,0),.2,.05));
@@ -140,15 +131,20 @@ void setup(){
   //  Env.BList.add(new Barrier(new PVector(init,300),new PVector(size,0),.2,.05));
   //  Env.BList.add(new Barrier(new PVector(init,300+depth),new PVector(0,-depth),.2,.05));
      
-  //  depth+=(int)(gap*0.1);
-  //   depth+=25; 
+  //  depth+=(int)(gap*0.4);
+  //  depth+=6; 
     
   //   Env.BList.add(new Barrier(new PVector(init+size,300),new PVector(0,depth),.2,.05));
   //  init+=size;
-  //  gap+=20;
-  //  size+=50;
-  //  if(size>300){
-  //    size=300; 
+  //  gap+=10;
+  //  gap+=5+(int)(gap*0.3);
+  //  if(gap>130){
+  //    gap=130; 
+  //  }
+    
+  //  size+=20;
+  //  if(size>400){
+  //    size=400; 
   //  }
   //}
   
@@ -156,7 +152,7 @@ void setup(){
   //int init=400;
   //int size=300;
   //int Width=30;
-  //int Height=10;
+  //int Height=5;
   //Env.BList.add(new Barrier(new PVector(-800,300),new PVector(800+init,0),.2,.05));
   //Env.BList.add(new Barrier(new PVector(init,300),new PVector(0,-Height),.2,.05));
   //while( init<2500){
@@ -167,8 +163,8 @@ void setup(){
   //  Env.BList.add(new Barrier(new PVector(init,300-Height),new PVector(0,Height),.2,.05));
      
   //  Height+=10;
-  //  if(Height>50){
-  //   Height=50;
+  //  if(Height>40){
+  //   Height=35;
   //  }
     
   //  Env.BList.add(new Barrier(new PVector(init+size,300),new PVector(0,-Height),.2,.05));
@@ -178,7 +174,7 @@ void setup(){
   ////Climb
   //int stepX=400;
   //int jumpX=20;
-  //int jumpY=5;
+  //int jumpY=2;
   //int X=-580;
   //int Y=340;
   //while(X<4000){
@@ -197,7 +193,7 @@ void setup(){
   
   
   for(int i=0;i<50;i++){
-   println(abs(round(1*randomGaussian()*1.6))); 
+    print(ceil(abs(randomGaussian()*0.5)));
   }
 }
 
@@ -273,19 +269,19 @@ void RunMainScreen(PGraphics MainScreen,PGraphics HistoGram,PGraphics SpeciesFre
   
   
   
-   MainScreen.fill(0);
-  MainScreen.ellipse(Cam.RealToScreenX(RayCast.Pos.x),Cam.RealToScreenY(RayCast.Pos.y),10,10);
+  //MainScreen.fill(0);
+  //MainScreen.ellipse(Cam.RealToScreenX(RayCast.Pos.x),Cam.RealToScreenY(RayCast.Pos.y),10,10);
   
-  MainScreen.line(Cam.RealToScreenX(RayCast.Pos.x),Cam.RealToScreenY(RayCast.Pos.y),Cam.RealToScreenX(RayCast.Pos.x+RayCast.Dir.x),Cam.RealToScreenY(RayCast.Pos.y+RayCast.Dir.y));
+  //MainScreen.line(Cam.RealToScreenX(RayCast.Pos.x),Cam.RealToScreenY(RayCast.Pos.y),Cam.RealToScreenX(RayCast.Pos.x+RayCast.Dir.x),Cam.RealToScreenY(RayCast.Pos.y+RayCast.Dir.y));
   
-  RayCast.Pos= Cam.ScreenToReal(new PVector(mouseX,mouseY));
+  //RayCast.Pos= Cam.ScreenToReal(new PVector(mouseX,mouseY));
   
-  MainScreen.text(RayCast.RayValue(Env.BList),Cam.RealToScreenX(RayCast.Pos.x),Cam.RealToScreenY(RayCast.Pos.y));
-  if( RayCast.Intersects(Env.BList)){
+  //MainScreen.text(RayCast.RayValue(Env.BList),Cam.RealToScreenX(RayCast.Pos.x),Cam.RealToScreenY(RayCast.Pos.y));
+  //if( RayCast.Intersects(Env.BList)){
     
-    PVector Intersect= RayCast.IntersectPoint(Env.BList);
-    MainScreen.ellipse(Cam.RealToScreenX(Intersect.x),Cam.RealToScreenY(Intersect.y),10,10);
-  }
+  //  PVector Intersect= RayCast.IntersectPoint(Env.BList);
+  //  MainScreen.ellipse(Cam.RealToScreenX(Intersect.x),Cam.RealToScreenY(Intersect.y),10,10);
+  //}
   MainScreen.endDraw();
   //tint(255,255);
   image(MainScreen,0,0);
@@ -468,7 +464,7 @@ void RunMainScreen(PGraphics MainScreen,PGraphics HistoGram,PGraphics SpeciesFre
       CurrentTestDisplay++;
       println("Current Display Forward one");
     }
-    if(PlayBackSpeed!=1){
+    if(PlayBackSpeed>4){
       if(Env.TestList.get(CurrentTestDisplay).Finalized){
         CurrentTestDisplay++;
         Env.TestList.get(CurrentTestDisplay).Reset();

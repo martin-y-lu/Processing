@@ -260,12 +260,12 @@ class Component extends Gate{
       
       PVector[]Inps=new PVector[dNumInps];
       int i=0;
-      for(float y=0.5*(Height-20*(dNumInps-1));i<dNumOuts;y+=20){
+      for(float y=0.5*(Height-20*(dNumInps-1));i<dNumInps;y+=20){
           Inps[i]= new PVector(10,y);
           i++;
       }
       
-      PVector[]Outs=new PVector[dNumInps];
+      PVector[]Outs=new PVector[dNumOuts];
       int j=0;
       for(float y=0.5*(Height-20*(dNumOuts-1));j<dNumOuts;y+=20){
           Outs[j]= new PVector(90,y);
@@ -283,9 +283,9 @@ class Component extends Gate{
          Gate Inp= new ComponentInput(new PVector(0,100+k*50),k);
          Internals.add(Inp);
       }
-      for(int l=0;l<dNumInps;l++){
+      for(int l=0;l<dNumOuts;l++){
          Gate Out= new ComponentOutput(new PVector(500,100+l*50),l);
-         Out.InFeed=new Logic[]{Internals.get(l)};
+         Out.InFeed=new Logic[]{Internals.get(min(l,dNumInps-1))};
          Internals.add(Out);
       }
   }
@@ -340,11 +340,7 @@ class Component extends Gate{
   }
   
   Logic clone(){
-    ArrayList<Logic> CloneInternals= new ArrayList<Logic>();
-    for(int i=0; i<Select.size();i++){// Clone selection
-      Logic clone= Select.get(i).clone();
-      CloneInternals.add(clone);
-    }
+    ArrayList<Logic> CloneInternals= CloneInternals();
     for(int i=0; i<CloneInternals.size();i++){ // If connections to prev select, move it to connect
       Gate thisLog= (Gate) CloneInternals.get(i);
       for( int inp=0; inp< thisLog.InFeed.length;inp++){
@@ -362,6 +358,44 @@ class Component extends Gate{
     Clone.InFeedIndexes=InFeedIndexes.clone();
     return Clone;
   }
+  ArrayList<Logic> CloneInternals(){
+    ArrayList<Logic> CloneInternals= new ArrayList<Logic>();
+    for(int i=0; i<Internals.size();i++){// Clone selection
+      Logic clone= Internals.get(i).clone();
+      CloneInternals.add(clone);
+    }
+    return CloneInternals;
+  }
+  Component GetTemplate(){
+    for(int i=0;i<Components.size();i++){
+      if(Components.get(i).Number==Number){
+          return Components.get(i);
+      }
+    }
+    return null;
+  }
+  
+  void FixComponent(){
+    boolean fixed= false;
+    for(int n=0;n<Components.size();n++){
+       if(Components.get(n).Number==Number){
+         Internals= Components.get(n).CloneInternals();
+         fixed=true;
+       }
+    }
+    if(!fixed){
+      for(int i=0;i<Internals.size();i++){
+        if(Internals.get(i) instanceof Component){
+          Component C=(Component)Internals.get(i);
+          C.FixComponent();
+        }
+      }
+    }
+  }
+  //ArrayList<Component> Contains(){//Array of components(Templates) contained
+  //  ArrayList<Component> Contained;
+    
+  //}
 }
 
 class ComponentInput extends Gate{
@@ -391,7 +425,7 @@ class ComponentInput extends Gate{
         super.Update();
       }
       Logic clone(){
-        Display Clone = new Display(Pos);
+        ComponentInput Clone = new ComponentInput(Pos,Number);
         Clone.Inp=Inp.clone();
         Clone.Out=Out.clone();
         Clone.InFeed=InFeed.clone();
@@ -402,7 +436,7 @@ class ComponentInput extends Gate{
   class ComponentOutput extends Gate{
        int Number;
         ComponentOutput(PVector dPos,int dNumber){
-          super(dPos,new PVector(40,40),1,0,new PVector[]{new PVector(0,20)},new PVector[]{new PVector(30,20)});
+          super(dPos,new PVector(40,40),1,1,new PVector[]{new PVector(0,20)},new PVector[]{new PVector(40,20)});
           Number=dNumber;
         }
         void Draw(PGraphics Window){
@@ -426,7 +460,7 @@ class ComponentInput extends Gate{
           super.Update();
         }
         Logic clone(){
-          Display Clone = new Display(Pos);
+          ComponentOutput Clone = new ComponentOutput(Pos,Number);
           Clone.Inp=Inp.clone();
           Clone.Out=Out.clone();
           Clone.InFeed=InFeed.clone();

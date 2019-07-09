@@ -178,13 +178,13 @@ class Organism{
   }
   void MutateOrg(){
     MuteAmount+=randomGaussian()*0.06;
-    int NumPoiRemoved=abs(round(MuteAmount*randomGaussian()*0.25));
+    int NumPoiRemoved=abs(round(MuteAmount*randomGaussian()*0.26));
     for(int r=0;r<NumPoiRemoved;r++){
       if(PList.size()>0){
         RemovePoi(randomInt(0,PList.size()-1));
       }
     }
-    int NumPoiAdded=abs(round(MuteAmount*randomGaussian()*0.25));
+    int NumPoiAdded=abs(round(MuteAmount*randomGaussian()*0.265));
     for(int a=0;a<NumPoiAdded;a++){
       //AddNewPoi();
       AddNewConnectedPoi();
@@ -209,8 +209,6 @@ class Organism{
     for(int an=0;an<NumNeuAdded;an++){
       AddNewNeu();
     }
-    
-    FixSmarts();
     for(int p=0;p<PList.size();p++){
       MutatePoi(p);
     }
@@ -222,15 +220,17 @@ class Organism{
     for(int n=0;n<NList.size();n++){
       MutateNeu(n);
     }
+    
+    FixSmarts();
   }
   void FixSmarts(){//Makes sure weights array is up to size
     for(int p=0;p<PList.size();p++){// Sets all Inputs given back to 0
       Point P=PList.get(p);
-      //if(P.Type!="Input"){
+      if(P.Type!="Input"){
         P.InputsUsed=0;
-      //}else{
-      //  P.InputsUsed=1;
-      //}
+      }else{
+        P.InputsUsed=((Eye)P).EyeRays.size();
+      }
     }
     for(int m=0;m<MList.size();m++){
       Muscle M=MList.get(m);
@@ -248,8 +248,14 @@ class Organism{
       if(P.Weights.length<=P.InputsUsed){
         int prevSize=P.Weights.length;
         P.Weights=expand(P.Weights,P.InputsUsed+1);
-        for(int i=prevSize;i<P.Weights.length;i++){
-          P.Weights[i]= randomGaussian()*0.8;
+       if(P.Type=="Input"){
+          for(int i=prevSize;i<P.Weights.length;i++){
+            P.Weights[i]=randomGaussian()*0.1;
+          }
+        }else{
+          for(int i=prevSize;i<P.Weights.length;i++){
+            P.Weights[i]=randomGaussian()*0.2;
+          }
         }
       }
     }
@@ -260,7 +266,7 @@ class Organism{
         int prevSize=M.Weights.length;
         M.Weights=expand(M.Weights,M.InputsUsed);
         for(int i=prevSize;i<M.Weights.length;i++){
-          M.Weights[i]= randomGaussian()*0.8;
+          M.Weights[i]= randomGaussian()*0.2;
         }
       }
     }
@@ -268,11 +274,11 @@ class Organism{
   void FixNewOrg(){
     for(int p=0;p<PList.size();p++){// Sets all Inputs given back to 0
       Point P=PList.get(p);
-      //if(P.Type!="Input"){
+      if(P.Type!="Input"){
         P.InputsUsed=0;
-      //}else{
-      //  P.InputsUsed=1;
-      //}
+      }else{
+        P.InputsUsed=((Eye)P).EyeRays.size();
+      }
     }
     for(int m=0;m<MList.size();m++){
       Muscle M=MList.get(m);
@@ -290,11 +296,25 @@ class Organism{
       if(P.Weights.length<=P.InputsUsed){
         int prevSize=P.Weights.length;
         P.Weights=expand(P.Weights,P.InputsUsed+1);
-        for(int i=prevSize;i<P.Weights.length;i++){
-          P.Weights[i]=10; //randomGaussian()*15.0;
+        if(P.Type=="Input"){
+          for(int i=prevSize;i<P.Weights.length;i++){
+            P.Weights[i]=randomGaussian()*8.0;
+          }
+        }else{
+          int plus=0;
+          int minus=0;
+          for(int i=prevSize;i<P.Weights.length;i++){
+            if(random(1)>0.5){
+              P.Weights[i]=10; //randomGaussian()*15.0;
+              plus++;
+            }else{
+              P.Weights[i]=-10; //randomGaussian()*15.0;
+              minus++;
+            }
+          }
+          int NumRequired= randomInt(-minus,plus);
+          P.Bias=-NumRequired*10.0/2;
         }
-        int NumRequired= min(floor(abs(randomGaussian()*3)),P.InputsUsed);
-        P.Bias=-NumRequired*10.0/2;
       }
     }
      for(int m=0;m<MList.size();m++){
@@ -314,7 +334,7 @@ class Organism{
   
   void GenNewPoi(){ //Generates and adds a random new Point.
       PVector Position=new PVector(random(E.SummonPos.x,E.SummonPos.x+E.SummonRect.x),random(E.SummonPos.y,E.SummonPos.y+E.SummonRect.y));
-      PList.add(new Point(Position,new PVector(0,0),6,0.25+randomGaussian()*0.08,new float[]{},randomGaussian()*15,new float[]{}));
+      PList.add(new Point(Position,new PVector(0,0),5,0.25+randomGaussian()*0.08,new float[]{},randomGaussian()*15,new float[]{}));
   }
   void AddNewPoi(){ ////Generates and adds a random new Point.
     if(random(1)>0.2){// 1 in 5 are eyes
@@ -371,10 +391,15 @@ class Organism{
   }
   void GenNewEye(){
      PVector Position=new PVector(random(E.SummonPos.x,E.SummonPos.x+E.SummonRect.x),random(E.SummonPos.y,E.SummonPos.y+E.SummonRect.y));
-     float len= random(40,80);
-     float ang=random(0,TWO_PI);
-     PVector Dir= new PVector(len*cos(ang),len*sin(ang));
-     PList.add(new Eye(Position,new PVector(0,0),1,0,Dir,randomGaussian()*8,randomGaussian()*13));
+     ArrayList<PVector> RayDirs=new ArrayList<PVector>();
+     int NumEyes= ceil(abs(randomGaussian()*0.7));
+     for(int i=0;i<NumEyes;i++){
+       float len= random(40,80);
+       float ang=random(0,TWO_PI);
+       PVector Dir= new PVector(len*cos(ang),len*sin(ang));
+       RayDirs.add(Dir);
+     }
+     PList.add(new Eye(Position,new PVector(0,0),1,0,RayDirs,new float[]{},randomGaussian()*13));
   }
   
   void RemovePoi(int N){//Removes given point without ruining Nerves and Muscles
@@ -443,14 +468,34 @@ class Organism{
     }
     if (Poi.Type.equals("Input")){
       //PVector mult=new PVector(random(1.0-0.05*MuteAmount,1.0+0.05*MuteAmount),random(0.05*MuteAmount,-0.05*MuteAmount));
-      PVector mult=new PVector(1.0+randomGaussian()*0.06*MuteAmount,randomGaussian()*0.06*MuteAmount);
-      PVector dir=((Eye)Poi).EyeRay.Dir;
-      ((Eye)Poi).EyeRay.Dir=PVMult(dir,mult);
-      if (PVmag(dir)>100){
-         ((Eye)Poi).EyeRay.Dir=PVsetmag( dir,100);
+      Eye Inp= (Eye)Poi;
+      float NumNewEyes=floor(abs(randomGaussian()*0.6*MuteAmount));     
+      for(int i=0;i<NumNewEyes;i++){
+       float len= random(40,80);
+       float ang=random(0,TWO_PI);
+       PVector Dir= new PVector(len*cos(ang),len*sin(ang));
+       Inp.EyeRays.add(new Ray(Inp.Pos,Dir));
+     }
+        
+      float NumDelEye=floor(abs(randomGaussian()*0.6*MuteAmount));
+      for(int i=0;i<NumDelEye;i++){
+         if(Inp.EyeRays.size()>1){
+            int ind=randomInt(0,Inp.EyeRays.size()-1);
+            Inp.EyeRays.remove(ind);
+         }
       }
-      if( PVmag(dir)<50 ){
-        ((Eye)Poi).EyeRay.Dir=PVsetmag( dir,50);
+      
+      for(int i=0;i<Inp.EyeRays.size();i++){
+        Ray EyeRay=Inp.EyeRays.get(i);
+        PVector mult=new PVector(1.0+randomGaussian()*0.06*MuteAmount,randomGaussian()*0.06*MuteAmount);
+        PVector dir=EyeRay.Dir;
+        EyeRay.Dir=PVMult(dir,mult);
+        if (PVmag(dir)>100){
+           EyeRay.Dir=PVsetmag( dir,100);
+        }
+        if( PVmag(dir)<50 ){
+          EyeRay.Dir=PVsetmag( dir,50);
+        }
       }
     }
   }

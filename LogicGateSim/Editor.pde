@@ -119,8 +119,7 @@ ArrayList<Logic> LoadPref(String prefFileName){
 }
 
 class Editor{ 
-  ArrayList<Logic>Gates;
-  
+  ArrayList<Logic>Gates=new ArrayList<Logic>();
   ArrayList<Logic> Select=new ArrayList<Logic>();
   
   class Interactables{
@@ -304,24 +303,33 @@ class Editor{
     } 
   }
   
-  Logic[] NearestGates(PVector Pos,ArrayList<Logic>Gates){
-    Logic[] Nearest=new Logic[]{Gates.get(0),Gates.get(1)};
-    float dist=99999999;
+  ArrayList<Logic> NearestGates(PVector Pos,ArrayList<Logic>Gates,int NumGates){
+    ArrayList<Logic> Nearest=new ArrayList<Logic>();
     for( int i=0; i<Gates.size();i++){
       float newDist=PVmag(PVadd(Pos,PVminus(((Gate)Gates.get(i)).Pos)));
-      println(newDist);
-      if(newDist<dist){
-        dist=newDist;
-        Nearest[1]=Nearest[0];
-        Nearest[0]=Gates.get(i);
+      float thisDist=999999999;
+      int index=0;
+      while(index<Nearest.size()){
+        thisDist=PVmag(PVadd(Pos,PVminus(((Gate)Nearest.get(index)).Pos)));
+        if(thisDist>newDist){
+          break; 
+        }
+        index++;
+      }
+      
+      if(index!=NumGates){
+         Nearest.add(index,Gates.get(i)); 
+      }
+      if(Nearest.size()>NumGates){
+         Nearest.remove(NumGates); 
       }
     }
     return Nearest;
   }
   void KeyPressInteract(int Key){
     int Gl=Gates.size();
-    Logic[] NearestGate=NearestGates(Ia.PVMouse,Gates);
-    println("NearestGates"+NearestGate.length);
+    ArrayList<Logic> NearestGates=NearestGates(Ia.PVMouse,Gates,2);
+    Logic[] NearestGate= new Logic[]{NearestGates.get(0),NearestGates.get(1)};
     if(Key=='a'){// Make an and gate at mouse, connected to nearest
       print("A");
       Logic NewAnd= new AndGate(Ia.PVMouse);
@@ -358,9 +366,10 @@ class Editor{
       Gates.add(NewDisp);
     }
     if(Key=='i'){// Make an Integrated comoponent
-      Logic NewComp= new Component(Ia.PVMouse,"Component",1,2,2);
-      NewComp.InFeed=new Logic[]{NearestGate[0],NearestGate[1]};
-      Gates.add(NewComp);
+     Windows.add(new NewIntegratedWindow(new PVector(300,300),this,Ia.PVMouse));
+      //Logic NewComp= new Component(Ia.PVMouse,"Component",1,2,2);
+      //NewComp.InFeed=new Logic[]{NearestGate[0],NearestGate[1]};
+      //Gates.add(NewComp);
     }
     
     if(Key=='y'){
@@ -373,7 +382,7 @@ class Editor{
         Gate GateI=(Gate)Gates.get(i);
         if(GateI.Moused(this)){
           if(GateI instanceof Component){
-            Windows.add(new Window(new PVector(200,200),new PVector(800,400),((Component) GateI).Name,((Component) GateI).GetEditor()));
+            Windows.add(new EditorWindow(new PVector(200,200),new PVector(800,400),((Component) GateI).Name,((Component) GateI).GetEditor()));
           }
         }
       }

@@ -27,13 +27,8 @@ class Smart{
       }else if(Activation=="Sigmoid"){
         return 1.0/(1+exp(-Val));
       }else if(Activation=="Tanh"){
-        if(Val>20){
-          return 1;
-        }
-        if(Val<-20){
-          return -1; 
-        }
-        return (exp(Val)-1)/(exp(Val)+1);
+        float exp=exp(Val);
+        return (exp-1)/(exp+1);
       }else{
         return Val;
       }
@@ -52,7 +47,7 @@ class Smart{
   }
   void MutateSmart(float MuteAmount){
     for(int i=0;i<Weights.length;i++){
-      Weights[i]+=MuteAmount*randomGaussian()*0.03;
+      Weights[i]+=MuteAmount*randomGaussian()*0.05;
       if(Weights[i]<-20){
         Weights[i]=-20;
       }
@@ -60,7 +55,7 @@ class Smart{
         Weights[i]=20;
       }
     }
-    Bias+=MuteAmount*randomGaussian()*0.04;
+    Bias+=MuteAmount*randomGaussian()*0.05;
     if(Bias<-100){
        Bias=-100; 
     }if(Bias>100){
@@ -90,9 +85,7 @@ class Point extends Smart{
     Bias=dBias;
   }
   Point ClonePoint(){ //Returns a Copy of a Particular Point.
-    Point P;
-     P=new Point(Pos.copy(),Vel.copy(),Mass,Friction,FArrayCopy(Weights),Bias,FArrayCopy(UncheckedIn));
-    return P;
+    return new Point(Pos.copy(),Vel.copy(),Mass,Friction,FArrayCopy(Weights),Bias,FArrayCopy(UncheckedIn));
   }
   PVector NextPos(){// Calc the next position of Point.
     return PVadd(Pos,PVadd(Vel,PVextend(Acc,0.5)));
@@ -143,15 +136,16 @@ class Eye extends Point{
      super(dPos,dVel,dMass,dFriction,dWeight,dBias);
      EyeRays=new ArrayList<Ray>();
      for(int i=0;i<dRayDirs.size();i++){
-       EyeRays.add(new Ray(dPos, dRayDirs.get(i).copy()));
+       EyeRays.add(new Ray(dPos,dRayDirs.get(i)));
      }
+     //EyeRay= new Ray(dPos, RayDir);
   }
   Point ClonePoint(){
     ArrayList<PVector> RayDirs= new ArrayList<PVector>();
     for(int i=0;i<EyeRays.size();i++){
       RayDirs.add(EyeRays.get(i).Dir.copy()); 
     }
-     return new Eye(Pos.copy(),Vel.copy(),Mass,Friction,RayDirs,FArrayCopy(Weights),Bias);
+    return new Eye(Pos.copy(),Vel.copy(),Mass,Friction,RayDirs,FArrayCopy(Weights),Bias);
   }
   void DrawP(Camera Cam,PGraphics Canvas){// Draws Eye.
     Canvas.strokeWeight(1*Cam.Zoom);
@@ -163,25 +157,26 @@ class Eye extends Point{
     Canvas.stroke(0);
     Canvas.ellipse(Cam.RealToScreenX(Pos.x),Cam.RealToScreenY(Pos.y),Radius*2*Cam.Zoom,Radius*2*Cam.Zoom);
     
+    Canvas.strokeWeight(1.5*Cam.Zoom);
     for(int i=0; i<EyeRays.size();i++){
       Ray EyeRay= EyeRays.get(i);
       PVector Origin=Pos.copy();
-      PVector End= EyeRay.PrevInt.copy();
-      PVector PrevPoint=Origin.copy();
-      PVector Disp=PVadd(End,PVminus(Origin));
-      Canvas.strokeWeight(1.3*Cam.Zoom);
-      for(float j=0;j<=1;j+=1.0/100){
-         PVector Point=PVlerp(Origin,End,j);
-         float state=Activation(PVDivide(Disp,EyeRay.Dir).x*Weights[i]);
-         if(state>0){
-            Canvas.stroke(state*200,0,255,Weights[i]*15+30);
-          }else{
-            Canvas.stroke(0,-state*200,255,Weights[i]*15+30);
-          }
-         Canvas.line(Cam.RealToScreenX(PrevPoint.x),Cam.RealToScreenY(PrevPoint.y),Cam.RealToScreenX(Point.x),Cam.RealToScreenY(Point.y));
-         PrevPoint=Point;
+      if(EyeRay.PrevInt!=null){
+        PVector End= EyeRay.PrevInt.copy();
+        PVector PrevPoint=Origin.copy();
+        PVector Disp=PVadd(End,PVminus(Origin));
+        for(float l=0;l<=1;l+=1.0/100){
+           PVector Point=PVlerp(Origin,End,l);
+           float state=Activation(PVDivide(Disp,EyeRay.Dir).x*Weights[0]+Bias);
+           if(state>0){
+              Canvas.stroke(state*200,0,255,100);
+            }else{
+              Canvas.stroke(0,-state*200,255,100);
+            }
+           Canvas.line(Cam.RealToScreenX(PrevPoint.x),Cam.RealToScreenY(PrevPoint.y),Cam.RealToScreenX(Point.x),Cam.RealToScreenY(Point.y));
+           PrevPoint=Point;
+        }
       }
-      
       Canvas.stroke(0);
       Canvas.strokeWeight(3*Cam.Zoom);
       Canvas.line(Cam.RealToScreenX(Pos.x),Cam.RealToScreenY(Pos.y),Cam.RealToScreenX(Pos.x+PVsetmag(EyeRay.Dir,Radius).x),Cam.RealToScreenY(Pos.y+PVsetmag(EyeRay.Dir,Radius).y));
@@ -199,10 +194,11 @@ class Eye extends Point{
   void SetState(Enviroment E){
     //State=E.InGround(this)? -1:1;
     //State= EyeRay.RayValue(E.BList);
-    float Sum=0;
-    for(int i=0; i<EyeRays.size();i++){
-       Sum+=EyeRays.get(i).RayValue(E.BList)*Weights[i];
-    }
+    float Sum=EyeRays.get(0).RayValue(E.BList)*Weights[0];
+    //println("SUM"+Sum);
+    //for(int i=0; i<EyeRays.size();i++){
+    //   Sum+=EyeRays.get(i).RayValue(E.BList)*Weights[i];
+    //}
     State= Activation(Sum+Bias);
   }
 }
@@ -323,7 +319,7 @@ class Muscle extends Smart{
   }
   void DrawM(Camera Cam ,PGraphics Canvas){// Draws Muscle.
     Force=FlLerp(StateA[0],StateB[0],State);
-    Canvas.stroke(0,0,0,(Force/(0.5)+0.1)*255);
+    Canvas.stroke(0,0,0,(Force/(0.5))*255);
     Canvas.strokeWeight(11*Cam.Zoom);
     Canvas.line(Cam.RealToScreenX(A.Pos.x),Cam.RealToScreenY(A.Pos.y),Cam.RealToScreenX(B.Pos.x),Cam.RealToScreenY(B.Pos.y));
     if(State>0){
@@ -407,7 +403,7 @@ class Ray{
   }
   PVector IntersectPoint(ArrayList<Barrier> B){
      float dist=Float.MAX_VALUE;
-     PVector point=new PVector(Float.MAX_VALUE,Float.MAX_VALUE);
+     PVector point=null;
      for(Barrier b: B){
        if( Intersects(b)){
          PVector inter= IntersectPoint(b);
@@ -436,6 +432,9 @@ class Ray{
   }
   float RayValue(ArrayList<Barrier> B){
      PVector inter= IntersectPoint(B);
+     if(inter==null){
+        return 100; 
+     }
      return max(min(PVDivide(PVadd(inter,PVminus(Pos)),Dir).x,100),-100); 
   }
   

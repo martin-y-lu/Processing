@@ -34,3 +34,16 @@ String PVstring(PVector P){
 Boolean FLtween(float A,float B,float M){
   return ((M>=A)&&(M<=B))||((M<=A)&&(M>=B));
 }
+
+
+public <T> ArrayList<T> intersection(ArrayList<T> list1, ArrayList<T> list2) {
+    ArrayList<T> list = new ArrayList<T>();
+
+    for (T t : list1) {
+        if(list2.contains(t)) {
+            list.add(t);
+        }
+    }
+
+    return list;
+}
