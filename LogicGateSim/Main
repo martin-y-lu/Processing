@@ -1,0 +1,6 @@
+Preferences: Row 1- Logic type, Row 2- Position, Row 3-Connection number, row 4- States,row 5- Gate information
+Button:Button:Button:Button:Component-TwoBitRam:Display:Display
+310.0,130.0:305.0,183.0:307.0,293.0:306.0,235.0:388.0,160.0:579.0,133.0:549.0,224.0
+::::0,0;1,0;3,0;2,0:4,0:4,1
+false;:false;:false;:false;:{false;:false;:false;:false;:false;:true;:false;:true;:false;:false;:{false;:false;:false;:false;:false;:true;:true;:true;:true;:false;:false;:false;:}:false;:{false;:false;:false;:true;:false;:{false;:false;:false;:true;:true;:false;:false;:true;:}:false;:true;:false;:}:false;:{false;:false;:true;:false;:true;:{false;:false;:true;:false;:true;:true;:true;:false;:}:false;:true;:false;:}:false;:false;:{false;:false;:false;:true;:false;:{false;:false;:false;:true;:true;:false;:false;:true;:}:false;:true;:false;:}:false;:false;:{false;:false;:false;:true;:false;:{false;:false;:false;:true;:true;:false;:false;:true;:}:false;:true;:false;:}:false;:false;:false;:false;:false;:true;:}:false;:true;
+false;:false;:false;:false;:::

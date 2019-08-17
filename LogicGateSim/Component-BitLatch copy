@@ -1,0 +1,6 @@
+BitLatch:6:2:2:1:1
+ComponentInput:ComponentInput:ComponentOutput:ComponentOutput:ComponentDisplay:Component-BitMem:AndGate:NotGate:AndGate
+-10.0,110.0:-10.0,160.0:384.0,100.0:390.0,161.0:449.0,112.0:258.0,122.0:135.0,153.0:41.0,99.0:134.0,101.0
+::5,0:5,1:2,0:8,0;6,0:0,0;1,0:0,0:7,0;1,0
+true:true:true:false:true:comp:true:false:false
+0:1:0:1:0::::

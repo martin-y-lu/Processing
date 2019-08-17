@@ -53,7 +53,7 @@ ArrayList<Window> Windows=new ArrayList<Window>();
 void SetActiveWindow(){
   for(int i=0;i<Windows.size();i++){
       Windows.get(i).Active=false;
-  } //<>//
+  } //<>// //<>// //<>//
   for(int i=Windows.size()-1;i>=0;i--){
     if(Windows.get(i).MouseIn()){
        Windows.get(i).Active=true;
@@ -61,15 +61,23 @@ void SetActiveWindow(){
     }
   }
 }
+void MoveWindowToTop(Window W){
+  Windows.remove(W);
+  Windows.add(W);
+}
 
 ArrayList<Component> Components= new ArrayList<Component>();
 void FixAllComponents(){
    for(int i=0;i<E.Gates.size();i++){
-      if(Components.get(i) instanceof Component){
+      if(E.Gates.get(i) instanceof Component){
         Component C=(Component)E.Gates.get(i);
         C.FixComponent();
       }
-    }
+   }
+   for(int i=0;i<Components.size();i++){
+      Component C=Components.get(i);
+      C.FixComponent();
+   }
 }
 void AddNewComponent(Component C){
     C.Number=Components.size();
@@ -80,7 +88,7 @@ void AddNewComponent(Component C){
 //}
 //Window W;
 Editor E;
-void setup(){          
+void setup(){
     frameRate(60);
     fullScreen(P2D);
     //size(640, 360);
@@ -131,7 +139,6 @@ void setup(){
     Not.endShape(CLOSE);
     
     
-  //  if(true){
       dGates.add(new Button(new PVector(50,100),true));
       dGates.add(new Button(new PVector(50,200),true));
       //Gates.add(new OrGate(new PVector(200,100)));
@@ -150,13 +157,11 @@ void setup(){
          }
       }
       E=new Editor(dGates);
-      Windows.add( new EditorWindow(new PVector(100,100),new PVector(800,400),"Main Window",E));
+      Windows.add(new MainWindow(new PVector(100,100),new PVector(800,400),"Main Window",E));
       //Windows.add( new Window(new PVector(200,200),new PVector(800,400),"Test Window",E));
       //Window=createGraphics(500,200,JAVA2D);
 
-    //}else{
-    //  LoadPref();
-    //}
+      //LoadAll();
 }
 void draw(){
   background(255-15,255-10,255-10); 
@@ -191,6 +196,4 @@ void keyPressed(){
   //scale(5);
   KeyPressed=true;
   prevPress=key;
-  
- 
 }

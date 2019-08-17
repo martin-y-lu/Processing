@@ -1,5 +1,0 @@
-Preferences: Row 1- Logic type, Row 2- Position, Row 3-Connection number, row 4- States
-Button:Button:Display
-50.0,100.0:50.0,200.0:374.0,400.0
-::1
-T:T:T

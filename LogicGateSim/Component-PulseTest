@@ -1,0 +1,6 @@
+PulseTest:11:2:2:0:0
+ComponentInput:ComponentInput:ComponentOutput:ComponentOutput:NoDelayDisplay:Display:OrGate:NoDelayDisplay:NoDelayDisplay:NoDelayDisplay:NoDelayDisplay
+50.0,220.0:430.0,319.0:550.0,220.0:550.0,270.0:326.0,287.0:405.0,263.0:171.0,161.0:71.0,206.0:78.0,184.0:97.0,165.0:118.0,159.0
+::5,0:1,0:6,0:4,0:10,0;4,0:0,0:7,0:8,0:9,0
+false::false::false::false::false::false::
+0:1:0:1:::::::
