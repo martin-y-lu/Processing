@@ -19,7 +19,8 @@ PImage IMGF;
 void setup(){
     frameRate(60);
     size(500,800);
-    IMGF=loadImage("POINCARKY.jpg");
+    //IMGF=loadImage("POINCARKY.jpg");
+        IMGF=loadImage("COWERS.jpg");
     IMG=createImage(800,800,RGB);
 }
 float SensorWidth=50;

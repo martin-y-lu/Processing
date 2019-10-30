@@ -6,7 +6,7 @@ public class Player{
   int regulartossups = 0;
   
   Player(String name){
-    this.name = name; 
+    this.name = name;
   }
   
   public void scoreUpdate(int val){
