@@ -1,6 +1,6 @@
-class Particle implements Comparable{
-    ChemSys Sys;
-    PVector pos;
+class Particle implements Comparable{ // Class for the paricles (atoms or functional groups)
+    ChemSys Sys;// Chemical system it is in
+    PVector pos;// Particle physical parameters
     PVector vel;
     PVector acc= new PVector(0,0);
     float radius;
@@ -10,17 +10,24 @@ class Particle implements Comparable{
     float angVel;
     float angAcc;
     float momInert;
+    private float SavedPotential=0;// Variable for potential (so it doesn't have to be calculated every time.
     
-    int NumSites;
+    int NumSites; // Bonding parameters
     float[] bondAngles;
     float[] bondAngKs;
     Bond[] Sites;
+    HBond[] HSites;
     
-    int type;
+    int ColorR; // color
+    int ColorG;
+    int ColorB;
     
-    Particle(ChemSys dSys, int dType, PVector dPos,PVector dVel,float dRad,float dMass,float dCharge,
+    int type; //Particle type
+    
+    Particle(ChemSys dSys, int dType, int dColorR,int dColorG, int dColorB, PVector dPos,PVector dVel,float dRad,float dMass,float dCharge,    // Initialise all particel paramaters
     float dAngle, float dAngVel, float dAngAcc,float dMomInert,
-    float[] dBondAngles ,float[] dBondAngKs){
+    float[] dBondAngles ,float[] dBondAngKs,int NumHBonds){
+      ColorR=dColorR; ColorG=dColorG; ColorB=dColorB;
       Sys=dSys;
       type=dType;
       pos=dPos; vel= dVel; radius= dRad; mass= dMass; charge= dCharge; 
@@ -28,6 +35,7 @@ class Particle implements Comparable{
       bondAngles=dBondAngles;  bondAngKs=dBondAngKs;
       NumSites=bondAngles.length;
       Sites= new Bond[NumSites];
+      HSites= new HBond[NumHBonds];
     }
     //Particle(ChemSys dSys,int dType,PVector dPos,PVector dVel,float dRad,float dMass,float dCharge,
     //float dAngle, float dAngVel, float dAngAcc,float dMomInert,
@@ -41,34 +49,40 @@ class Particle implements Comparable{
     //}
     
     
-    void Draw(Cam Camera){
+    void Draw(Cam Camera){// Draw particel
       //fill(60,20,220);
+      strokeWeight(4/Camera.Scale);
       if(charge<0){
-        fill(10,30,255) ;
+        stroke(10,30,255) ;
       }else if(charge>0){
-        fill(255,10,30) ;
+        stroke(255,10,30) ;
       }else{
-         fill(10,255,30) ;
+        stroke(10,255,30) ;
       }
+      fill(ColorR,ColorG,ColorB);
       //stroke(255);
       //strokeWeight(5.0/Camera.Scale);
       //if(bonded){
       //   bondP.Draw(Camera);
       //   //line(Camera.RealToScreenX(pos.x),Camera.RealToScreenY(pos.y),Camera.RealToScreenX(bondP.pos.x),Camera.RealToScreenY(bondP.pos.y));
       //}
-      noStroke();
+      //noStroke();
       ellipse(Camera.RealToScreenX(pos.x),Camera.RealToScreenY(pos.y),radius*2/Camera.Scale,radius*2/Camera.Scale); 
       stroke(255);
       strokeWeight(2.0/Camera.Scale);
       line(Camera.RealToScreenX(pos.x),Camera.RealToScreenY(pos.y),Camera.RealToScreenX(pos.x)+radius*sin(angle)/Camera.Scale,Camera.RealToScreenY(pos.y)+radius*cos(angle)/Camera.Scale);
+      strokeWeight(1.3/Camera.Scale);
+      for(int i=0; i<bondAngles.length;i++){
+        line(Camera.RealToScreenX(pos.x),Camera.RealToScreenY(pos.y),Camera.RealToScreenX(pos.x)+radius*sin(angle+bondAngles[i])/Camera.Scale,Camera.RealToScreenY(pos.y)+radius*cos(angle+bondAngles[i])/Camera.Scale);
+      }
       
       fill(255);
       textSize(18.0/Camera.Scale);
-      text(type,Camera.RealToScreenX(pos.x)-5,Camera.RealToScreenY(pos.y)+5);
+      text(Sys.Symbols[type],Camera.RealToScreenX(pos.x)-5/Camera.Scale,Camera.RealToScreenY(pos.y)+5/Camera.Scale);
       
 
     }
-    float potential(){
+    float potential(){// Calculate potential energy of particle (Electric potenetial energy)
        float pot=0;
        pot-=mass*(pos.x*Sys.GRAV.x+pos.y*Sys.GRAV.y);
        for(int i=0;i<Sys.Particles.size();i++){
@@ -76,23 +90,24 @@ class Particle implements Comparable{
          if(other != this){
            float dist=PVmag(PVadd(pos,PVneg(other.pos)));
            pot+= charge*other.charge/max(radius+other.radius,dist);
-           if( dist<Sys.hBondRadius[type][other.type]){
-             pot-= (Sys.hBondRadius[type][other.type]- dist)*Sys.hBondForce[type][other.type];
-           }
+           //if( dist<Sys.hBondLength[type][other.type]){
+           //  pot-= (Sys.hBondLength[type][other.type]- dist)*Sys.hBondForce[type][other.type];
+           //}
          }
        }
        //if(bonded){
        //  pot+=bondP.Potential();
        //}
+       SavedPotential=pot;
        return pot;
     }
-    float kinetic(){
+    float kinetic(){// KE
       return 0.5*mass*PVmag(vel)*PVmag(vel)+0.5*momInert*angVel*angVel;
     }
     float energy(){
-       return kinetic()+potential();
+       return kinetic()+SavedPotential;
     }
-    void UpdatePos(){
+    void UpdatePos(){// Update pstion and angle
       pos=PVadd(pos,vel);
       //PVadd(pos,PVadd(vel,PVscale(acc,0.5)));
       angle+=angVel;
@@ -111,7 +126,7 @@ class Particle implements Comparable{
       UpdatePos();
       UpdateVel();
     }
-    float ForceMag(float d,float f){
+    float ForceMag(float d,float f){ // Maginitude of electric force given distance and charge
        if(d>radius){
          return 0; 
        }
@@ -128,7 +143,7 @@ class Particle implements Comparable{
       float dist2=max(pow(radius,2),AxisX.x*AxisX.x+AxisX.y*AxisX.y);
       return PVsetMag(AxisX,charge/dist2);
     }
-    void Affect(Particle other){
+    void Affect(Particle other){ /// Affect other particles electirically
       PVector AxisX=PVadd(pos,PVneg(other.pos));  
       
        //EM
@@ -137,20 +152,14 @@ class Particle implements Comparable{
          ApplyForce(PVsetMag(AxisX,charge*other.charge/dist2));
          other.ApplyForce(PVsetMag(PVneg(AxisX),charge*other.charge/dist2));
        }
-       
-       //Elasitic
-       //if(bonded){
-       //  if(other==bondP.B){
-       //    bondP.Update();
-       //  }
+       //if(dist2<pow(Sys.hBondRadius[type][other.type],2)){
+       //  PVector dir=PVadd(other.pos,PVneg(pos));
+       //  ApplyForce(PVsetMag(dir,Sys.hBondForce[type][other.type]));
+       //  other.ApplyForce(PVneg(PVsetMag(dir,Sys.hBondForce[type][other.type])));
        //}
-       if(dist2<pow(Sys.hBondRadius[type][other.type],2)){
-         PVector dir=PVadd(other.pos,PVneg(pos));
-         ApplyForce(PVsetMag(dir,Sys.hBondForce[type][other.type]));
-         other.ApplyForce(PVneg(PVsetMag(dir,Sys.hBondForce[type][other.type])));
-       }
     }
-    boolean BondedTo(Particle other){
+    // Checks if bondend to othe partiles
+    boolean BondedTo(Particle other){ 
       for( int b=0; b<Sites.length;b++){
         if(Sites[b]!=null){
           if(Sites[b].Connects(other)){
@@ -160,6 +169,17 @@ class Particle implements Comparable{
       }
       return false;
     }
+    boolean HBondedTo(Particle other){
+      for( int b=0; b<HSites.length;b++){
+        if(HSites[b]!=null){
+          if(HSites[b].Connects(other)){
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+    // Checks if colliding
     boolean Collides(Particle other){
       PVector AxisX=PVadd(pos,PVneg(other.pos));  
       PVector RelV1=PVdivide(vel,AxisX);
@@ -181,6 +201,7 @@ class Particle implements Comparable{
        }
        return 0;
     }
+    // Collides particle, and adds specified amount of enegry
     void Collide(Particle other, float energyadded){
       //Collide
       float k=energyadded*2;
@@ -209,8 +230,9 @@ class Particle implements Comparable{
        }
         
     }
+    
+    //Colllide wall
     void CollideWall(){
-      
       if(pos.x<radius){
         vel=new PVector(abs(vel.x),vel.y);
       }
@@ -228,27 +250,31 @@ class Particle implements Comparable{
       }
     }
     
-    int compareTo(Object P) {
+    int compareTo(Object P) { //DEFUNCT
       return Float.compare(((Particle)P).kinetic(),kinetic());
     }
 }
-class Bond{
+class Bond{// Class for covalent bonds
+    //Physical parameters
    float bondLength;
    float bondK;
    float bondEnergy;
+   
+   //Particels and bonding sites
    Particle A;
    int AInd;
    Particle B;
    int BInd;
+   private float Potential;
    
-   Bond(float dBondLength, float dBondK,float dBondEnergy, Particle dA,int dAInd,Particle dB,int dBInd){
+   Bond(float dBondLength, float dBondK,float dBondEnergy, Particle dA,int dAInd,Particle dB,int dBInd){ /// Initialise bonds
     bondLength=dBondLength; bondK=dBondK; bondEnergy= dBondEnergy; A=dA; AInd=dAInd; B=dB; BInd=dBInd;
    }
    
-   boolean Connects(Particle other){
+   boolean Connects(Particle other){ // Check if bond connects to a certain particel
       return (A==other)||(B==other); 
    }
-   void Update(){
+   void Update(){ /// Update particles attactched to bond
       PVector dir=PVadd(A.pos,PVneg(B.pos));
        float dist= PVmag(dir);
        float disp=bondLength-dist;
@@ -271,7 +297,7 @@ class Bond{
          PVector tforce= PVsetMag(new PVector(dir.y,-dir.x),-ftMag);
          B.ApplyForce(tforce);
          //ApplyForce(PVneg(tforce));
-         float bondDisp= (bondedAngle-B.angle-B.bondAngles[BInd])%TWO_PI;// B Bonding site angle here
+         float bondDisp= (B.angle-bondedAngle+B.bondAngles[BInd])%TWO_PI;// B Bonding site angle here
          if(bondDisp>PI){
            bondDisp=bondDisp-TWO_PI;
          }
@@ -282,32 +308,84 @@ class Bond{
          A.ApplyForce(bondTForce);    
        }
    }
-   float potential(){
+   float SetPotential(){ //Calculate potential energy of  abond , and store it
      float pot=-bondEnergy;
      float dist=PVmag(PVadd(A.pos,PVneg(B.pos)));
      float disp=dist-bondLength;
-     pot+= 0.5*bondK*(disp*disp);
+     pot+= 0.5*bondK*(disp*disp); // linear EPE
      
      float bondAngle= atan2(B.pos.x-A.pos.x,B.pos.y-A.pos.y);
      float angDisp= (A.angle-bondAngle+A.bondAngles[AInd])%TWO_PI;
      if(angDisp>PI){
        angDisp=angDisp-TWO_PI;
      }
-     pot+= 0.5*A.bondAngKs[AInd]*(angDisp*angDisp); 
-     float bondDisp= (bondAngle-B.angle-B.bondAngles[BInd])%TWO_PI;
+     pot+= 0.5*A.bondAngKs[AInd]*(angDisp*angDisp);  // Angular EPE
+     float bondDisp= (B.angle-bondAngle+B.bondAngles[BInd])%TWO_PI;
      if(bondDisp>PI){
        bondDisp=bondDisp-TWO_PI;
      }
      pot+= 0.5*B.bondAngKs[BInd]*(bondDisp*bondDisp);
+     Potential=pot;
      return pot;
    }
-   void Draw(Cam Camera){
+   float potential(){
+     return Potential;
+   }
+   void Draw(Cam Camera){// Draw Bond
       stroke(255);
       strokeWeight(5.0/Camera.Scale);
-      line(Camera.RealToScreenX(A.pos.x),Camera.RealToScreenY(A.pos.y),Camera.RealToScreenX(B.pos.x),Camera.RealToScreenY(B.pos.y));
+      //line(Camera.RealToScreenX(A.pos.x),Camera.RealToScreenY(A.pos.y),Camera.RealToScreenX(B.pos.x),Camera.RealToScreenY(B.pos.y));
+      line( Camera.RealToScreenX(A.pos.x)+0.5*A.radius*sin(A.angle+A.bondAngles[AInd])/Camera.Scale,Camera.RealToScreenY(A.pos.y)+0.5*A.radius*cos(A.angle+A.bondAngles[AInd])/Camera.Scale,
+      Camera.RealToScreenX(B.pos.x)+0.5*B.radius*sin(B.angle+B.bondAngles[BInd])/Camera.Scale,Camera.RealToScreenY(B.pos.y)+0.5*B.radius*cos(B.angle+B.bondAngles[BInd])/Camera.Scale);
       PVector mid = new PVector((A.pos.x+B.pos.x)/2,(A.pos.y+B.pos.y)/2);
       fill(255,0,0);
       textSize(4.0/Camera.Scale);
       text("BOND:"+nf(potential(),3,1),Camera.RealToScreenX(mid.x),Camera.RealToScreenY(mid.y));
    }
+}
+class HBond{// Class for HBOND
+// Physical parameters
+  float bondLength;
+  float bondForce;
+  Particle A;
+  int AInd;
+  Particle B;
+  int BInd;
+  private float Potential; // potential energy
+  HBond(float dBondLength, float dBondForce, Particle dA, Particle dB){// Initialise
+   bondLength= dBondLength; bondForce=dBondForce; A=dA; B=dB; 
+  }
+   boolean Connects(Particle other){
+      return (A==other)||(B==other); 
+   }
+  void Update(){// Update particle s
+      PVector AxisX=PVadd(A.pos,PVneg(B.pos));  
+      float dist2=max(pow(A.radius+B.radius,2),AxisX.x*AxisX.x+AxisX.y*AxisX.y);
+      if(dist2<pow(bondLength,2)){
+         PVector dir=PVadd(B.pos,PVneg(A.pos));
+         A.ApplyForce(PVsetMag(dir,bondForce));
+         B.ApplyForce(PVneg(PVsetMag(dir,bondForce)));
+      }
+  }
+  float SetPotential(){ // Calculate and set potential enegry
+     float pot=0;
+     float dist=PVmag(PVadd(A.pos,PVneg(B.pos)));
+     if( dist<bondLength){
+       pot-= (bondLength- dist)*bondForce;
+     }
+     Potential=pot;
+     return pot;
+  }
+  float potential(){
+    return Potential;  
+  }
+  void Draw(Cam Camera){ // Draw particle
+     //float dist= PVmag(PVadd(P.pos,PVneg(J.pos)));
+     //if(dist<hBondRadius[P.type][J.type]){
+       strokeWeight(bondForce*3.0/Camera.Scale);
+              //strokeWeight(2/Camera.Scale);
+       line(Camera.RealToScreenX(A.pos.x),Camera.RealToScreenY(A.pos.y),Camera.RealToScreenX(B.pos.x),Camera.RealToScreenY(B.pos.y));
+     //}
+  }
+  
 }
