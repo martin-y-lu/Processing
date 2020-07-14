@@ -23,14 +23,14 @@ class State{
   }
   void DrawState(int x,int y){
     int Height=25*SymbolList.length;
-    fill(255,160,160);
+    fill(200,60,60);
     rect(x,y,Width,25+Height);
-    if((this==CurrState)&&(OpNum!=0)){
+    if((this==CurrState)){
        fill(255,180,180);
        rect(x,25+25*CurrValue+y,Width,25);
     }
-    fill(130,20,20);
     textSize(16);
+    fill(255);
     text(StateName,x+30,19+y);
     if(StateName!="HALT"){
       for(int i=0;i<SymbolList.length;i++){
@@ -57,9 +57,9 @@ class State{
           }
         }
         line(x,25+25*i+y,x+ Width,25+25*i+y);
-        fill(130,20,20);
+        fill(255);
         textSize(20);
-        text(SymbolList[i],x+10,25+25*i+20+y);
+        text(SymbolList[i]+":",x+10,25+25*i+20+y);
         text(SymbolList[WriteSymbols[i]],x+40,25+25*i+20+y);
         if(MoveRight[i]){
           text("->",x+73,25+25*i+20+y);

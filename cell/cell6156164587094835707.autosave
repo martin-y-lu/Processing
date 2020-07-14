@@ -1,0 +1,36 @@
+int a,b,c,d,l=100;
+int[][] S,R,D= {{-1,0},{-1,-1},{0,-1},{1,-1}};
+void setup(){
+  size(100,100);colorMode(HSB);S=R=new int[l][l];
+  for(a=0;a<5;a++){
+    R[a][0]=S[50+a][0]=floor(random(3));
+  }
+}
+void draw(){
+  for(a=1;a<l-1;a++)for(b=1;b<l-1;b++){
+    stroke(S[a][b]*60,255,255);
+    point(a,b);
+    for(d=c=0;d<4;d++){
+      c+=S[a+D[d][0]][b+D[d][1]];
+    }
+    S[a][b]=R[c][0];
+  }
+}
+//int a,b,c,d,l=100;
+//int[][]S,D= {{-1,0},{0,-1},{1,-1}};
+//void setup(){
+//  S=new int[l][l];
+//  for(a=0;a<5;a++){
+//    S[60+a][0]=floor(random(3));
+//  }
+//}
+//void draw(){
+//  for(a=1;a<l-1;a++)for(b=1;b<l-1;b++){
+//    stroke(S[a][b]*85);
+//    point(a,b);
+//    for(d=c=0;d<3;d++){
+//      c+=S[a+D[d][0]][b+D[d][1]];
+//    }
+//    S[a][b]=S[60+c][0];
+//  }
+//}

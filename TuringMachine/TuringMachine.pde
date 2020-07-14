@@ -11,11 +11,11 @@ int CurrValue;
 int InitPointNum=10;
 boolean Halted=false;
 String[] SymbolList={"a","b","c"}; 
-int[] InitTapeList={0,0,0,0,0,0,
-                   0,0,0,0,0,0,
-                   0,0,0,0,0,0,
-                   0,0,0,0,0,0,
-                   0,0,0,0,0,0};
+int[] InitTapeList={1,1,0,2,1,0,
+                   0,1,0,2,1,0,
+                   2,0,1,0,2,0,
+                   0,1,0,1,2,2,
+                   0,2,0,0,1,1,0,0,0,0,0,0,0,0,0,0};
                    
 int PointNum=10;
 int[] TapeNumList=new int[InitTapeList.length];
@@ -26,27 +26,28 @@ void setup(){
     size(1000, 360);
     arrayCopy(InitTapeList,TapeNumList);
     StateList.add(H);
-    StateList.add(new State("Right1",new int[]{1,0},new boolean[]{true,true}));
-    StateList.add(new State("Right2",new int[]{1,0},new boolean[]{true,false}));
-    StateList.add(new State("Left1",new int[]{1,0},new boolean[]{false,false}));
-    StateList.add(new State("Left2",new int[]{1,0},new boolean[]{false,true}));
+    StateList.add(new State("Right1",new int[]{0,1,0},new boolean[]{true,true,true}));
+    StateList.add(new State("Right2",new int[]{0,1,0},new boolean[]{true,false,true}));
+    StateList.add(new State("Left1",new int[]{0,1,0},new boolean[]{false,false,false}));
+    StateList.add(new State("Left2",new int[]{0,1,0},new boolean[]{false,true,false}));
     CurrState=StateList.get(1);
     StateList.get(1).InitStates(new int[]{1,2,1});
     StateList.get(2).InitStates(new int[]{1,3,1});
-    StateList.get(3).InitStates(new int[]{3,4,1});
-    StateList.get(4).InitStates(new int[]{3,1,1});
+    StateList.get(3).InitStates(new int[]{3,4,3});
+    StateList.get(4).InitStates(new int[]{3,0,3});
 }
 
 void draw(){
-  background(160,190,255); 
+  background(9); 
   fill(0);
   strokeWeight(2);
   
   for(int i=0;i<TapeNumList.length;i++){
-    fill(130,20,20);
+    fill(255);
     textSize(12);
-    text(i,20+i*25,15);
-    fill(255,100,100);
+    text(i,18+i*25,15);
+    stroke(255);
+    fill(120,20,20);
     if(MouseIn(15+i*25,20,20,30)){
       fill(255,200,200);
       if(MouseClicked){
@@ -60,7 +61,7 @@ void draw(){
     }
     rect(15+i*25,20,20,30);
     
-    fill(130,20,20);
+    fill(255);
     textSize(20);
     text(SymbolList[TapeNumList[i]],19+i*25,42);
     
@@ -70,11 +71,11 @@ void draw(){
   triangle(25+PointNum*25,60,45+PointNum*25,85,5+PointNum*25,85);
   int ShiftAmount=0;
   if(OpNum==0){
-   ShiftAmount=0;
-  }else if(OpNum==1){
    ShiftAmount=30;
+  }else if(OpNum==1){
+   ShiftAmount=70;
   }else if(OpNum==2){
-   ShiftAmount=60;
+   ShiftAmount=130;
   }
   triangle(25+(CurrStateNum-1)*180+ShiftAmount,135+25*SymbolList.length
   ,45+(CurrStateNum-1)*180+ShiftAmount,160+25*SymbolList.length
@@ -89,7 +90,7 @@ void draw(){
       OneStep();
     }
     fill(255,200,200);
-  }else{fill(255,160,160);}
+  }else{fill(250,110,110);}
   rect(10,275-20,200,25);
   
   if(MouseIn(10,310-20,200,25)){
@@ -100,7 +101,7 @@ void draw(){
         OneStep();
       }
     }
-  }else{fill(255,160,160);}
+  }else{fill(250,110,110);}
   rect(10,310-20,200,25);
   
   if(MouseIn(10,345-20,200,25)){
@@ -108,7 +109,7 @@ void draw(){
     if(MouseClicked){
       ManyRounds= !ManyRounds;
     }
-  }else{fill(255,160,160);}
+  }else{fill(250,110,110);}
   rect(10,345-20,200,25);
   
   if(MouseIn(220,275-20,200,25)){
@@ -117,10 +118,10 @@ void draw(){
       ManyRounds=false;
       Reset();
     }
-  }else{fill(255,160,160);}
+  }else{fill(250,110,110);}
   rect(220,275-20,200,25);
   
-  fill(130,20,20);
+  fill(255);
   textSize(20);
   text("Do one Operation",20,275);
   text("Do one Round",20,310);
@@ -139,7 +140,7 @@ void draw(){
   if(!Reset){
     text("Running",220,345);
   }
-  
+  MouseClicked=false;
 }
 void OneStep(){
   Reset=false;
@@ -173,4 +174,7 @@ void Reset(){
 }
 void mouseClicked(){
   MouseClicked=true;
+}
+void mouseReleased(){
+ // MouseClicked=false;
 }
