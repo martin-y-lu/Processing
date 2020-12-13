@@ -1,0 +1,3 @@
+# arc 2 https://processing.org/reference/arc_.html
+
+arc(50, 50, 80, 80, 0, PI + QUARTER_PI, OPEN)

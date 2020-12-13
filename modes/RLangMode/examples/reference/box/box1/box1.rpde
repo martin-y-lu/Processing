@@ -1,0 +1,16 @@
+# box 1 https://processing.org/reference/box_.html
+
+settings <- function() {
+    size(100, 100, P3D)
+}
+
+setup <- function() {
+    noLoop()
+}
+
+draw <- function() {
+    translate(58, 48, 0)
+    rotateY(0.5)
+    noFill()
+    box(40)
+}

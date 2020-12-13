@@ -1,0 +1,8 @@
+setup <- function() {
+    s = loadShape(paste("https://raw.githubusercontent.com", "/gaocegege/Processing.R/master/raw-docs", 
+        "/img/examples/bot1.svg", sep = ""))
+}
+
+draw <- function() {
+    shape(s, 10, 10, 80, 80)
+}

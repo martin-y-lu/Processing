@@ -1,0 +1,652 @@
+# THE TEXT BELOW IS HAND WRITTEN AND FOUND IN THE FILE "keywords_base.txt"
+# IN THE PROCESSING-DOCS REPO. DON'T EDITS THE keywords.txt FILE DIRECTLY.
+
+# For an explanation of these tags, see Token.java 
+# trunk/processing/app/src/processing/app/syntax/Token.java
+
+# keywords (void, import, , etc.)
+abstract	KEYWORD1
+break	KEYWORD1	break
+class	KEYWORD1	class
+continue	KEYWORD1	continue
+false	KEYWORD1	false
+final	KEYWORD1	final
+finally	KEYWORD1
+import	KEYWORD1	import
+private	KEYWORD1	private
+protected	KEYWORD1	
+public	KEYWORD1	public
+static	KEYWORD1	static
+true	KEYWORD1	true
+void	KEYWORD1	void
+
+# GLSL keywords (data types)
+		
+attribute	KEYWORD5
+const	KEYWORD5
+uniform	KEYWORD5
+varying	KEYWORD5
+buffer	KEYWORD5
+shared	KEYWORD5
+coherent	KEYWORD5
+volatile	KEYWORD5
+restrict	KEYWORD5
+readonly	KEYWORD5
+writeonly	KEYWORD5
+atomic_uint	KEYWORD5
+layout	KEYWORD5
+quads	KEYWORD5
+equal_spacing	KEYWORD5
+fractional_even_spacing	KEYWORD5
+fractional_odd_spacing	KEYWORD5
+cw	KEYWORD5
+ccw	KEYWORD5
+points	KEYWORD5
+centroid	KEYWORD5
+flat	KEYWORD5
+smooth	KEYWORD5
+noperspective	KEYWORD5
+patch	KEYWORD5
+sample	KEYWORD5
+break	KEYWORD5
+continue	KEYWORD5
+do	KEYWORD5
+for	KEYWORD5
+while	KEYWORD5
+switch	KEYWORD5
+case	KEYWORD5
+default	KEYWORD5
+if	KEYWORD5
+else	KEYWORD5
+subroutine	KEYWORD5
+in	KEYWORD5
+out	KEYWORD5
+inout	KEYWORD5
+float	KEYWORD5
+double	KEYWORD5
+int	KEYWORD5
+bool	KEYWORD5
+true	KEYWORD5
+false	KEYWORD5
+invariant	KEYWORD5
+precise	KEYWORD5
+discard	KEYWORD5
+return	KEYWORD5
+lowp	KEYWORD5
+mediump	KEYWORD5
+highp	KEYWORD5
+precision	KEYWORD5
+
+######################
+
+mat2	KEYWORD5
+mat3	KEYWORD5
+mat4	KEYWORD5
+dmat2	KEYWORD5
+dmat3	KEYWORD5
+dmat4	KEYWORD5
+mat2x2	KEYWORD5
+mat2x3	KEYWORD5
+mat2x4	KEYWORD5
+dmat2x2	KEYWORD5
+dmat2x3	KEYWORD5
+dmat2x4	KEYWORD5
+mat3x2	KEYWORD5
+mat3x3	KEYWORD5
+mat3x4	KEYWORD5
+dmat3x2	KEYWORD5
+dmat3x3	KEYWORD5
+dmat3x4	KEYWORD5
+mat4x2	KEYWORD5
+mat4x3	KEYWORD5
+mat4x4	KEYWORD5
+dmat4x2	KEYWORD5
+dmat4x3	KEYWORD5
+dmat4x4	KEYWORD5
+vec2	KEYWORD5
+vec3	KEYWORD5
+vec4	KEYWORD5
+ivec2	KEYWORD5
+ivec3	KEYWORD5
+ivec4	KEYWORD5
+bvec2	KEYWORD5
+bvec3	KEYWORD5
+bvec4	KEYWORD5
+dvec2	KEYWORD5
+dvec3	KEYWORD5
+dvec4	KEYWORD5
+uint	KEYWORD5
+uvec2	KEYWORD5
+uvec3	KEYWORD5
+uvec4	KEYWORD5
+int64_t	KEYWORD5
+i64vec2	KEYWORD5
+i64vec3	KEYWORD5
+i64vec4	KEYWORD5
+uint64_t	KEYWORD5
+u64vec2	KEYWORD5
+u64vec3	KEYWORD5
+u64vec4	KEYWORD5
+sampler1D	KEYWORD5
+sampler2D	KEYWORD5
+sampler3D	KEYWORD5
+samplerCube	KEYWORD5
+sampler1DShadow	KEYWORD5
+sampler2DShadow	KEYWORD5
+samplerCubeShadow	KEYWORD5
+sampler1DArray	KEYWORD5
+sampler2DArray	KEYWORD5
+sampler1DArrayShadow	KEYWORD5
+sampler2DArrayShadow	KEYWORD5
+isampler1D	KEYWORD5
+isampler2D	KEYWORD5
+isampler3D	KEYWORD5
+isamplerCube	KEYWORD5
+isampler1DArray	KEYWORD5
+isampler2DArray	KEYWORD5
+usampler1D	KEYWORD5
+usampler2D	KEYWORD5
+usampler3D	KEYWORD5
+usamplerCube	KEYWORD5
+usampler1DArray	KEYWORD5
+usampler2DArray	KEYWORD5
+sampler2DRect	KEYWORD5
+sampler2DRectShadow	KEYWORD5
+isampler2DRect	KEYWORD5
+usampler2DRect	KEYWORD5
+samplerBuffer	KEYWORD5
+isamplerBuffer	KEYWORD5
+usamplerBuffer	KEYWORD5
+sampler2DMS	KEYWORD5
+isampler2DMS	KEYWORD5
+usampler2DMS	KEYWORD5
+sampler2DMSArray	KEYWORD5
+isampler2DMSArray	KEYWORD5
+usampler2DMSArray	KEYWORD5
+samplerCubeArray	KEYWORD5
+samplerCubeArrayShadow	KEYWORD5
+isamplerCubeArray	KEYWORD5
+usamplerCubeArray	KEYWORD5
+image1D	KEYWORD5
+iimage1D	KEYWORD5
+uimage1D	KEYWORD5
+image2D	KEYWORD5
+iimage2D	KEYWORD5
+uimage2D	KEYWORD5
+image3D	KEYWORD5
+iimage3D	KEYWORD5
+uimage3D	KEYWORD5
+image2DRect	KEYWORD5
+iimage2DRect	KEYWORD5
+uimage2DRect	KEYWORD5
+imageCube	KEYWORD5
+iimageCube	KEYWORD5
+uimageCube	KEYWORD5
+imageBuffer	KEYWORD5
+iimageBuffer	KEYWORD5
+uimageBuffer	KEYWORD5
+image1DArray	KEYWORD5
+iimage1DArray	KEYWORD5
+uimage1DArray	KEYWORD5
+image2DArray	KEYWORD5
+iimage2DArray	KEYWORD5
+uimage2DArray	KEYWORD5
+imageCubeArray	KEYWORD5
+iimageCubeArray	KEYWORD5
+uimageCubeArray	KEYWORD5
+image2DMS	KEYWORD5
+iimage2DMS	KEYWORD5
+uimage2DMS	KEYWORD5
+image2DMSArray	KEYWORD5
+iimage2DMSArray	KEYWORD5
+uimage2DMSArray	KEYWORD5
+struct	KEYWORD5
+common	KEYWORD5
+partition	KEYWORD5
+active	KEYWORD5
+asm	KEYWORD5
+class	KEYWORD5
+union	KEYWORD5
+enum	KEYWORD5
+typedef	KEYWORD5
+template	KEYWORD5
+this	KEYWORD5
+resource	KEYWORD5
+goto	KEYWORD5
+inline	KEYWORD5
+noinline	KEYWORD5
+public	KEYWORD5
+static	KEYWORD5
+extern	KEYWORD5
+external	KEYWORD5
+interface	KEYWORD5
+long	KEYWORD5
+short	KEYWORD5
+half	KEYWORD5
+fixed	KEYWORD5
+unsigned	KEYWORD5
+superp	KEYWORD5
+input	KEYWORD5
+output	KEYWORD5
+hvec2	KEYWORD5
+hvec3	KEYWORD5
+hvec4	KEYWORD5
+fvec2	KEYWORD5
+fvec3	KEYWORD5
+fvec4	KEYWORD5
+sampler3DRect	KEYWORD5
+filter	KEYWORD5
+sizeof	KEYWORD5
+cast	KEYWORD5
+namespace	KEYWORD5
+using	KEYWORD5
+constant_id	KEYWORD5
+local_size_x_id	KEYWORD5
+local_size_y_id	KEYWORD5
+local_size_z_id	KEYWORD5
+local_size_variable	KEYWORD5
+input_attachment_index	KEYWORD5
+push_constant	KEYWORD5
+set	KEYWORD5
+binding	KEYWORD5
+sampler	KEYWORD5
+subpassInput	KEYWORD5
+subpassInputMS	KEYWORD5
+isubpassInput	KEYWORD5
+isubpassInputMS	KEYWORD5
+usubpassInput	KEYWORD5
+usubpassInputMS	KEYWORD5
+early_fragment_tests	KEYWORD5
+post_depth_coverage	KEYWORD5
+
+
+# Flow structures
+
+catch	KEYWORD3	catch
+do	KEYWORD3
+for	KEYWORD3	for
+if	KEYWORD3	if
+else	KEYWORD3	else
+switch	KEYWORD3	switch
+while	KEYWORD3	while
+try	KEYWORD3	try
+
+catch	FUNCTION3	catch
+do	FUNCTION3
+for	FUNCTION3	for
+if	FUNCTION3	if
+#else	FUNCTION3	else
+switch	FUNCTION3	switch
+while	FUNCTION3	while
+#try	FUNCTION3	try
+
+
+# Keywords followed by parenthesis
+
+layout	FUNCTION1	layout
+mat2	FUNCTION1	mat2
+mat3	FUNCTION1	mat3
+mat4	FUNCTION1	mat4
+dmat2	FUNCTION1	dmat2
+dmat3	FUNCTION1	dmat3
+dmat4	FUNCTION1	dmat4
+mat2x2	FUNCTION1	mat2x2
+mat2x3	FUNCTION1	mat2x3
+mat2x4	FUNCTION1	mat2x4
+dmat2x2	FUNCTION1	dmat2x2
+dmat2x3	FUNCTION1	dmat2x3
+dmat2x4	FUNCTION1	dmat2x4
+mat3x2	FUNCTION1	mat3x2
+mat3x3	FUNCTION1	mat3x3
+mat3x4	FUNCTION1	mat3x4
+dmat3x2	FUNCTION1	dmat3x2
+dmat3x3	FUNCTION1	dmat3x3
+dmat3x4	FUNCTION1	dmat3x4
+mat4x2	FUNCTION1	mat4x2
+mat4x3	FUNCTION1	mat4x3
+mat4x4	FUNCTION1	mat4x4
+dmat4x2	FUNCTION1	dmat4x2
+dmat4x3	FUNCTION1	dmat4x3
+dmat4x4	FUNCTION1	dmat4x4
+vec2	FUNCTION1	vec2
+vec3	FUNCTION1	vec3
+vec4	FUNCTION1	vec4
+ivec2	FUNCTION1	ivec2
+ivec3	FUNCTION1	ivec3
+ivec4	FUNCTION1	ivec4
+bvec2	FUNCTION1	bvec2
+bvec3	FUNCTION1	bvec3
+bvec4	FUNCTION1	bvec4
+dvec2	FUNCTION1	dvec2
+dvec3	FUNCTION1	dvec3
+dvec4	FUNCTION1	dvec4
+uint	FUNCTION1	uint
+uvec2	FUNCTION1	uvec2
+uvec3	FUNCTION1	uvec3
+uvec4	FUNCTION1	uvec4
+radians	FUNCTION1	radians
+degrees	FUNCTION1	degrees
+sin	FUNCTION1	sin
+cos	FUNCTION1	cos
+tan	FUNCTION1	tan
+asin	FUNCTION1	asin
+acos	FUNCTION1	acos
+atan	FUNCTION1	atan
+sinh	FUNCTION1	sinh
+cosh	FUNCTION1	cosh
+tanh	FUNCTION1	tanh
+asinh	FUNCTION1	asinh
+acosh	FUNCTION1	acosh
+atanh	FUNCTION1	atanh
+pow	FUNCTION1	pow
+exp	FUNCTION1	exp
+log	FUNCTION1	log
+exp2	FUNCTION1	exp2
+log2	FUNCTION1	log2
+sqrt	FUNCTION1	sqrt
+inversesqrt	FUNCTION1	inversesqrt
+abs	FUNCTION1	abs
+sign	FUNCTION1	sign
+floor	FUNCTION1	floor
+trunc	FUNCTION1	trunc
+round	FUNCTION1	round
+roundEven	FUNCTION1	roundEven
+ceil	FUNCTION1	ceil
+fract	FUNCTION1	fract
+mod	FUNCTION1	mod
+modf	FUNCTION1	modf
+min	FUNCTION1	min
+max	FUNCTION1	max
+clamp	FUNCTION1	clamp
+mix	FUNCTION1	mix
+step	FUNCTION1	step
+smoothstep	FUNCTION1	smoothstep
+isnan	FUNCTION1	isnan
+isinf	FUNCTION1	isinf
+floatBitsToInt	FUNCTION1	floatBitsToInt
+floatBitsToUint	FUNCTION1	floatBitsToUint
+intBitsToFloat	FUNCTION1	intBitsToFloat
+uintBitsToFloat	FUNCTION1	uintBitsToFloat
+fma	FUNCTION1	fma
+frexp	FUNCTION1	frexp
+ldexp	FUNCTION1	ldexp
+packUnorm2x16	FUNCTION1	packUnorm2x16
+packSnorm2x16	FUNCTION1	packSnorm2x16
+packUnorm4x8	FUNCTION1	packUnorm4x8
+packSnorm4x8	FUNCTION1	packSnorm4x8
+unpackUnorm2x16	FUNCTION1	unpackUnorm2x16
+unpackSnorm2x16	FUNCTION1	unpackSnorm2x16
+unpackUnorm4x8	FUNCTION1	unpackUnorm4x8
+unpackSnorm4x8	FUNCTION1	unpackSnorm4x8
+packDouble2x32	FUNCTION1	packDouble2x32
+unpackDouble2x32	FUNCTION1	unpackDouble2x32
+packHalf2x16	FUNCTION1	packHalf2x16
+unpackHalf2x16	FUNCTION1	unpackHalf2x16
+length	FUNCTION1	length
+distance	FUNCTION1	distance
+dot	FUNCTION1	dot
+cross	FUNCTION1	cross
+normalize	FUNCTION1	normalize
+ftransform	FUNCTION1	ftransform
+faceforward	FUNCTION1	faceforward
+reflect	FUNCTION1	reflect
+refract	FUNCTION1	refract
+matrixCompMult	FUNCTION1	matrixCompMult
+outerProduct	FUNCTION1	outerProduct
+transpose	FUNCTION1	transpose
+determinant	FUNCTION1	determinant
+inverse	FUNCTION1	inverse
+lessThan	FUNCTION1	lessThan
+lessThanEqual	FUNCTION1	lessThanEqual
+greaterThan	FUNCTION1	greaterThan
+greaterThanEqual	FUNCTION1	greaterThanEqual
+equal	FUNCTION1	equal
+notEqual	FUNCTION1	notEqual
+any	FUNCTION1	any
+all	FUNCTION1	all
+not	FUNCTION1	not
+uaddCarry	FUNCTION1	uaddCarry
+usubBorrow	FUNCTION1	usubBorrow
+umulExtended	FUNCTION1	umulExtended
+imulExtended	FUNCTION1	imulExtended
+bitfieldExtract	FUNCTION1	bitfieldExtract
+bitfieldInsert	FUNCTION1	bitfieldInsert
+bitfieldReverse	FUNCTION1	bitfieldReverse
+bitCount	FUNCTION1	bitCount
+findLSB	FUNCTION1	findLSB
+findMSB	FUNCTION1	findMSB
+textureSize	FUNCTION1	textureSize
+textureQueryLod	FUNCTION1	textureQueryLod
+textureQueryLevels	FUNCTION1	textureQueryLevels
+textureSamples	FUNCTION1	textureSamples
+texture	FUNCTION1	texture
+textureProj	FUNCTION1	textureProj
+textureLod	FUNCTION1	textureLod
+textureOffset	FUNCTION1	textureOffset
+texelFetch	FUNCTION1	texelFetch
+texelFetchOffset	FUNCTION1	texelFetchOffset
+textureProjOffset	FUNCTION1	textureProjOffset
+textureLodOffset	FUNCTION1	textureLodOffset
+textureProjLod	FUNCTION1	textureProjLod
+textureProjLodOffset	FUNCTION1	textureProjLodOffset
+textureGrad	FUNCTION1	textureGrad
+textureGradOffset	FUNCTION1	textureGradOffset
+textureProjGrad	FUNCTION1	textureProjGrad
+textureProjGradOffset	FUNCTION1	textureProjGradOffset
+textureGather	FUNCTION1	textureGather
+textureGatherOffset	FUNCTION1	textureGatherOffset
+textureGatherOffsets	FUNCTION1	textureGatherOffsets
+texture1D	FUNCTION1	texture1D
+texture1DProj	FUNCTION1	texture1DProj
+texture1DLod	FUNCTION1	texture1DLod
+texture1DProjLod	FUNCTION1	texture1DProjLod
+texture2D	FUNCTION1	texture2D
+texture2DProj	FUNCTION1	texture2DProj
+texture2DLod	FUNCTION1	texture2DLod
+texture2DProjLod	FUNCTION1	texture2DProjLod
+texture3D	FUNCTION1	texture3D
+texture3DProj	FUNCTION1	texture3DProj
+texture3DLod	FUNCTION1	texture3DLod
+texture3DProjLod	FUNCTION1	texture3DProjLod
+textureCube	FUNCTION1	textureCube
+textureCubeLod	FUNCTION1	textureCubeLod
+shadow1D	FUNCTION1	shadow1D
+shadow2D	FUNCTION1	shadow2D
+shadow1DProj	FUNCTION1	shadow1DProj
+shadow2DProj	FUNCTION1	shadow2DProj
+shadow1DLod	FUNCTION1	shadow1DLod
+shadow2DLod	FUNCTION1	shadow2DLod
+shadow1DProjLod	FUNCTION1	shadow1DProjLod
+shadow2DProjLod	FUNCTION1	shadow2DProjLod
+atomicCounterIncrement	FUNCTION1	atomicCounterIncrement
+atomicCounterDecrement	FUNCTION1	atomicCounterDecrement
+atomicCounter	FUNCTION1	atomicCounter
+atomicAdd	FUNCTION1	atomicAdd
+atomicMin	FUNCTION1	atomicMin
+atomicMax	FUNCTION1	atomicMax
+atomicAnd	FUNCTION1	atomicAnd
+atomicOr	FUNCTION1	atomicOr
+atomicXor	FUNCTION1	atomicXor
+atomicExchange	FUNCTION1	atomicExchange
+atomicCompSwap	FUNCTION1	atomicCompSwap
+imageSize	FUNCTION1	imageSize
+imageSamples	FUNCTION1	imageSamples
+imageLoad	FUNCTION1	imageLoad
+imageStore	FUNCTION1	imageStore
+imageAtomicAdd	FUNCTION1	imageAtomicAdd
+imageAtomicMin	FUNCTION1	imageAtomicMin
+imageAtomicMax	FUNCTION1	imageAtomicMax
+imageAtomicAnd	FUNCTION1	imageAtomicAnd
+imageAtomicOr	FUNCTION1	imageAtomicOr
+imageAtomicXor	FUNCTION1	imageAtomicXor
+imageAtomicExchange	FUNCTION1	imageAtomicExchange
+imageAtomicCompSwap	FUNCTION1	imageAtomicCompSwap
+dFdx	FUNCTION1	dFdx
+dFdy	FUNCTION1	dFdy
+dFdxFine	FUNCTION1	dFdxFine
+dFdyFine	FUNCTION1	dFdyFine
+dFdxCoarse	FUNCTION1	dFdxCoarse
+dFdyCoarse	FUNCTION1	dFdyCoarse
+fwidth	FUNCTION1	fwidth
+fwidthFine	FUNCTION1	fwidthFine
+fwidthCoarse	FUNCTION1	fwidthCoarse
+interpolateAtCentroid	FUNCTION1	interpolateAtCentroid
+interpolateAtSample	FUNCTION1	interpolateAtSample
+interpolateAtOffset	FUNCTION1	interpolateAtOffset
+noise1	FUNCTION1	noise1
+noise2	FUNCTION1	noise2
+noise3	FUNCTION1	noise3
+noise4	FUNCTION1	noise4
+EmitStreamVertex	FUNCTION1	EmitStreamVertex
+EndStreamPrimitive	FUNCTION1	EndStreamPrimitive
+EmitVertex	FUNCTION1	EmitVertex
+EndPrimitive	FUNCTION1	EndPrimitive
+barrier	FUNCTION1	barrier
+memoryBarrier	FUNCTION1	memoryBarrier
+memoryBarrierAtomicCounter	FUNCTION1	memoryBarrierAtomicCounter
+memoryBarrierBuffer	FUNCTION1	memoryBarrierBuffer
+memoryBarrierShared	FUNCTION1	memoryBarrierShared
+memoryBarrierImage	FUNCTION1	memoryBarrierImage
+groupMemoryBarrier	FUNCTION1	groupMemoryBarrier
+subpassLoad	FUNCTION1	subpassLoad
+ballotARB	FUNCTION1	ballotARB
+readInvocationARB	FUNCTION1	readInvocationARB
+readInvocationARB	FUNCTION1	readInvocationARB
+readInvocationARB	FUNCTION1	readInvocationARB
+readFirstInvocationARB	FUNCTION1	readFirstInvocationARB
+readFirstInvocationARB	FUNCTION1	readFirstInvocationARB
+readFirstInvocationARB	FUNCTION1	readFirstInvocationARB
+atomicCounterAddARB	FUNCTION1	atomicCounterAddARB
+atomicCounterSubtractARB	FUNCTION1	atomicCounterSubtractARB
+atomicCounterMinARB	FUNCTION1	atomicCounterMinARB
+atomicCounterMaxARB	FUNCTION1	atomicCounterMaxARB
+atomicCounterAndARB	FUNCTION1	atomicCounterAndARB
+atomicCounterOrARB	FUNCTION1	atomicCounterOrARB
+atomicCounterXorARB	FUNCTION1	atomicCounterXorARB
+atomicCounterExchangeARB	FUNCTION1	atomicCounterExchangeARB
+atomicCounterCompSwapARB	FUNCTION1	atomicCounterCompSwapARB
+anyInvocationARB	FUNCTION1	anyInvocationARB
+allInvocationsARB	FUNCTION1	allInvocationsARB
+allInvocationsEqualARB	FUNCTION1	allInvocationsEqualARB
+
+
+
+
+# Shader specific built-in variables
+
+gl_NumWorkGroups	KEYWORD2	gl_NumWorkGroups
+gl_WorkGroupSize	KEYWORD2	gl_WorkGroupSize
+gl_WorkGroupID	KEYWORD2	gl_WorkGroupID
+gl_LocalInvocationID	KEYWORD2	gl_LocalInvocationID
+gl_GlobalInvocationID	KEYWORD2	gl_GlobalInvocationID
+gl_LocalInvocationIndex	KEYWORD2	gl_LocalInvocationIndex
+gl_LocalGroupSizeARB	KEYWORD2	gl_LocalGroupSizeARB
+gl_VertexID	KEYWORD2	gl_VertexID
+gl_VertexIndex	KEYWORD2	gl_VertexIndex
+gl_InstanceID	KEYWORD2	gl_InstanceID
+gl_InstanceIndex	KEYWORD2	gl_InstanceIndex
+gl_PerVertex	KEYWORD2	gl_PerVertex
+gl_Position	KEYWORD2	gl_Position
+gl_PointSize	KEYWORD2	gl_PointSize
+gl_ClipDistance	KEYWORD2	gl_ClipDistance
+gl_CullDistance	KEYWORD2	gl_CullDistance
+gl_in	KEYWORD2	gl_in
+gl_out	KEYWORD2	gl_out
+gl_PrimitiveIDIn	KEYWORD2	gl_PrimitiveIDIn
+gl_InvocationID	KEYWORD2	gl_InvocationID
+gl_PrimitiveID	KEYWORD2	gl_PrimitiveID
+gl_Layer	KEYWORD2	gl_Layer
+gl_ViewportIndex	KEYWORD2	gl_ViewportIndex
+gl_PatchVerticesIn	KEYWORD2	gl_PatchVerticesIn
+gl_PrimitiveID	KEYWORD2	gl_PrimitiveID
+gl_InvocationID	KEYWORD2	gl_InvocationID
+gl_TessLevelOuter	KEYWORD2	gl_TessLevelOuter
+gl_TessLevelInner	KEYWORD2	gl_TessLevelInner
+gl_PatchVerticesIn	KEYWORD2	gl_PatchVerticesIn
+gl_PrimitiveID	KEYWORD2	gl_PrimitiveID
+gl_TessCoord	KEYWORD2	gl_TessCoord
+gl_MaxPatchVertices	KEYWORD2	gl_MaxPatchVertices
+gl_FragColor	KEYWORD2	gl_FragColor
+gl_FragCoord	KEYWORD2	gl_FragCoord
+gl_FrontFacing	KEYWORD2	gl_FrontFacing
+gl_ClipDistance	KEYWORD2	gl_ClipDistance
+gl_CullDistance	KEYWORD2	gl_CullDistance
+gl_PointCoord	KEYWORD2	gl_PointCoord
+gl_PrimitiveID	KEYWORD2	gl_PrimitiveID
+gl_SampleID	KEYWORD2	gl_SampleID
+gl_SamplePosition	KEYWORD2	gl_SamplePosition
+gl_SampleMaskIn	KEYWORD2	gl_SampleMaskIn
+gl_Layer	KEYWORD2	gl_Layer
+gl_ViewportIndex	KEYWORD2	gl_ViewportIndex
+gl_HelperInvocation	KEYWORD2	gl_HelperInvocation
+gl_FragDepth	KEYWORD2	gl_FragDepth
+gl_SampleMask	KEYWORD2	gl_SampleMask
+gl_DrawIDARB	KEYWORD2	gl_DrawIDARB
+gl_BaseVertexARB	KEYWORD2	gl_BaseVertexARB
+gl_BaseInstanceARB	KEYWORD2	gl_BaseInstanceARB
+gl_SubGroupSizeARB	KEYWORD2	gl_SubGroupSizeARB
+gl_SubGroupInvocationARB	KEYWORD2	gl_SubGroupInvocationARB
+gl_SubGroupEqMaskARB	KEYWORD2	gl_SubGroupEqMaskARB
+gl_SubGroupGeMaskARB	KEYWORD2	gl_SubGroupGeMaskARB
+gl_SubGroupGtMaskARB	KEYWORD2	gl_SubGroupGtMaskARB
+gl_SubGroupLeMaskARB	KEYWORD2	gl_SubGroupLeMaskARB
+gl_SubGroupLtMaskARB	KEYWORD2	gl_SubGroupLtMaskARB
+
+
+
+
+# Temporary additions 3 September 2012 as the reference is getting updated
+#end	FUNCTION1
+#addChild	FUNCTION1
+
+# Operators are without KEYWORDS
+
++=		addassign
++		addition
+[]		arrayaccess
+=		assign
+&		bitwiseAND
+|		bitwiseOR
+,		comma
+//		comment
+?		conditional
+{}		curlybraces
+--		decrement
+/		divide
+/=		divideassign
+/**		doccomment
+.		dot
+==		equality
+>		greaterthan
+>=		greaterthanorequalto
+++		increment
+!=		inequality
+<<		leftshift
+<		lessthan
+<=		lessthanorequalto
+&&		logicalAND
+!		logicalNOT
+||		logicalOR
+-		minus
+%		modulo
+/*		multilinecomment
+*		multiply
+*=		multiplyassign
+()		parentheses
+>>		rightshift
+;		semicolon
+-=		subtractassign
+
+# Suppressed from Generate to avoid conflicts with variables inside methods
+
+
+# THE TEXT ABOVE IS HAND-WRITTEN AND FOUND IN THE FILE "keywords_base.txt" in processing/processing-docs/generate
+#
+# THE TEXT BELOW IS AUTO-GENERATED
+#
+# SO 
+# DON'T 
+# TOUCH 
+# IT
+
+

@@ -1,0 +1,4 @@
+setup <- function() {
+    line(11, 22, 33, 22)
+    stdout$print("Hello, Processing.R")
+}

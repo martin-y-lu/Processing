@@ -1,0 +1,16 @@
+# sphere 1 https://processing.org/reference/sphere_.html
+
+settings <- function() {
+    size(100, 100, P3D)
+}
+
+setup <- function() {
+    noLoop()
+}
+
+draw <- function() {
+    noStroke()
+    lights()
+    translate(58, 48, 0)
+    sphere(28)
+}

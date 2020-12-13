@@ -1,0 +1,18 @@
+# line 3 https://processing.org/reference/line_.html
+
+# Drawing lines in 3D requires P3D as a parameter to size()
+
+settings <- function() {
+    size(100, 100, P3D)
+}
+
+setup <- function() {
+}
+
+draw <- function() {
+    line(30, 20, 0, 85, 20, 15)
+    stroke(126)
+    line(85, 20, 15, 85, 75, 0)
+    stroke(255)
+    line(85, 75, 0, 30, 75, -50)
+}

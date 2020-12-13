@@ -1,0 +1,37 @@
+# curveTightness 1x -- original fails on map, mouseX
+# https://processing.org/reference/curveTightness_.html
+
+settings <- function() {
+    size(100, 100, P3D)
+}
+
+setup <- function() {
+    noFill()
+    noLoop()
+}
+
+draw <- function() {
+    # t <- map(50, 0, width, -5, 5)
+    background(204)
+    # curveTightness(t)
+    
+    mycurve(-1)
+    translate(0, 10)
+    mycurve(0)
+    translate(0, 10)
+    mycurve(1)
+    translate(0, 10)
+    mycurve(2)
+}
+
+mycurve <- function(tightness) {
+    curveTightness(tightness)
+    beginShape()
+    curveVertex(10, 26)
+    curveVertex(10, 26)
+    curveVertex(83, 24)
+    curveVertex(83, 61)
+    curveVertex(25, 65)
+    curveVertex(25, 65)
+    endShape()
+}

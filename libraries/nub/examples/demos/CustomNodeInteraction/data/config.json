@@ -1,0 +1,18 @@
+{
+  "eye": {
+    "orientation": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "magnitude": 0.5773502588272095,
+    "position": [
+      0,
+      -16.491649627685547,
+      200
+    ]
+  },
+  "radius": 100,
+  "type": "PERSPECTIVE"
+}
