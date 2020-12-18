@@ -4,15 +4,15 @@ PVector PVadd(PVector A,PVector B){
 PVector PVsub(PVector A, PVector B){
   return new PVector(A.x-B.x,A.y-B.y);
 }
-PVector PVextend(PVector A,float B){
+PVector PVscale(PVector A,float B){
   return new PVector(A.x*B,A.y*B);
 }
 
 PVector PVsetmag(PVector P,float L){
-  return PVextend(P,L/PVmag(P));
+  return PVscale(P,L/PVmag(P));
 }
 PVector PVminus(PVector P){
-  return PVextend(P,-1);
+  return PVscale(P,-1);
 }
 float PVmag(PVector P){
   return dist(0,0,P.x,P.y);
@@ -25,7 +25,7 @@ PVector PVdivide(PVector P,PVector C){
   (C.x*P.y-C.y*P.x)/((C.x*C.x)+(C.y*C.y)));
 }
 PVector PVlerp(PVector A,PVector B,float L){
- return PVadd(PVextend(A,1-L),PVextend(B,L));
+ return PVadd(PVscale(A,1-L),PVscale(B,L));
 }
 String PVstring(PVector P){
   return " X:"+ P.x+" Y:"+P.y;

@@ -2,6 +2,7 @@ static PVector UPPER_LEFT;
 static PVector UPPER_RIGHT;
 static PVector LOWER_LEFT;
 static PVector LOWER_RIGHT;
+PVector CAMERA= vec();
 static float SCALE=100;
 static EaseFunction EASE=new SineEaseFunction().iterate(2);
 static abstract class EaseFunction{

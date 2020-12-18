@@ -1,3 +1,5 @@
+import processing.core.PApplet;
+
 class SquareAnimProcedure extends AnimProcedure{
   int c=1;
   int n=14;
@@ -18,26 +20,26 @@ class SquareAnimProcedure extends AnimProcedure{
     if(squares_initial!=null){
        squares_initial.draw();
        //text("Hello",squares_initial.origin.x,squares_initial.origin.x);
-       pushMatrix();
-        resetMatrix();
-        scale(3);
+       //pushMatrix();
+       // resetMatrix();
+       // scale(3);
 
         
         
-        if(known){
-          textAlign(LEFT, TOP);
-          text(sum+"=",40,25);
-          textAlign(CENTER, TOP);
-          String text="";
-          for(int i=0;i<n;i++){
-            text+=(c+i)+(i<n-1?"+":"");
-          }
-          text(text,15,40,100,100);
-        }else{
-          textAlign(LEFT, TOP);
-         text(sum+"= 2*"+ round(sum/2),40,25); 
-        }
-        popMatrix();
+       // if(known){
+       //   textAlign(LEFT, TOP);
+       //   text(sum+"=",40,25);
+       //   textAlign(CENTER, TOP);
+       //   String text="";
+       //   for(int i=0;i<n;i++){
+       //     text+=(c+i)+(i<n-1?"+":"");
+       //   }
+       //   text(text,15,40,100,100);
+       // }else{
+       //   textAlign(LEFT, TOP);
+       //  text(sum+"= 2*"+ round(sum/2),40,25); 
+       // }
+       // popMatrix();
     }
     
     
@@ -48,6 +50,11 @@ class SquareAnimProcedure extends AnimProcedure{
     //new int[][]{new int[]{0,1},new int[]{0,2},new int[]{0,3},new int[]{0,4}}
     squares_initial=new Squares(origin,0,0)._SetShapeSum(n,c);
     //add(new SquareLerpTransition(100,squares_initial)._Translate(vec(2,0))._Ease()._Spee d(0.05));
+    add(
+      //new SquareModifyEvent(squares_initial)._XShift(0)._YShift(0),
+      new SquareLerpTransition(100,squares_initial)._EndPos(endPos)._Ease(),
+      new DelayTransition(10)
+    );
     if(n%2==0){
       print("Even case");
        evenCase();
@@ -55,11 +62,7 @@ class SquareAnimProcedure extends AnimProcedure{
       print("Odd case");
        oddCase(); 
     }
-    add(
-      //new SquareModifyEvent(squares_initial)._XShift(0)._YShift(0),
-      new SquareLerpTransition(100,squares_initial)._EndPos(endPos)._Ease(),
-      new DelayTransition(10)
-    );
+    
   }
   void evenCase(){
      add(
@@ -89,9 +92,9 @@ class SquareAnimProcedure extends AnimProcedure{
                   squares_split_diag.set(squares_initial.split_diag(a));
                 }
               },
-              new SquareModifyTransition(40,squares_split_diag)._YShift(2*a)._Speed(0.05),
-              new SquareModifyTransition(20,squares_split_diag)._XShift(n)._Speed(0.05),
-              new SquareModifyTransition(40,squares_split_diag)._YShift(a)._Speed(0.05),
+              new SquareModifyTransition(40,squares_split_diag)._YShift(2*a),
+              new SquareModifyTransition(20,squares_split_diag)._XShift(n),
+              new SquareModifyTransition(40,squares_split_diag)._YShift(a),
               new AnimEvent(){
                 public void occur(){
                   squares_initial.set(squares_initial.merge(squares_copy).merge(squares_split_diag));;
@@ -162,8 +165,8 @@ class SquareAnimProcedure extends AnimProcedure{
             super.start();
             print("Starting");
           }
-        },
-        new DelayTransition(1)
+        }
+        //new DelayTransition(1)
       ); 
   }
   void oddCase(){
@@ -232,40 +235,118 @@ class SquareAnimProcedure extends AnimProcedure{
   }
 };
 AnimController animController;
-//= new AnimProcedure(){
-//      public void setup(){
-//        add(new SquareAnimProcedure(2,6,PVadd(UPPER_LEFT,vec(1,-6))));
-//      }
-//      public void draw(){};
-//    };
+ //new AnimController(this){
+ //     SquareAnimProcedure prevAnim;
+ //     int depth=0;
+ //     public void setup(){
+ //       prevAnim=new SquareAnimProcedure(5,2,PVadd(UPPER_LEFT,vec(1,-6)),PVadd(UPPER_LEFT,vec(1+3,-6)));
+ //       add(prevAnim);
+ //       AnimEvent continue_event=new AnimEvent(){
+ //         public void occur(){
+ //           depth++;
+ //           prevAnim=new SquareAnimProcedure(prevAnim.c,prevAnim.n, PVadd(UPPER_LEFT,vec(1+3,-6)),PVadd(UPPER_LEFT,vec(1+3,-6)));
+ //           add(prevAnim);
+ //           if(depth<4){
+ //             add(this);
+ //           }
+ //         }
+ //       };
+ //       add(continue_event);
+        
+ //     }
+ //     public void draw(){
+ //     };
+ //   };
+ // try{
+ //   animController.setup();
+ // } catch (Exception e){
+ //   e.printStackTrace();
+ // }
 void setup(){
   size(1600,700);
+  println(dataPath(""));
   UPPER_LEFT=new PVector(-width/(SCALE*2),height/(SCALE*2));
   UPPER_RIGHT= new PVector(width/(SCALE*2),height/(SCALE*2));
   LOWER_LEFT= new PVector(-width/(SCALE*2),-height/(SCALE*2));
   LOWER_RIGHT= new PVector(width/(SCALE*2),-height/(SCALE*2));
-  animController= new AnimProcedure(){
+  if(this instanceof PApplet){
+    print("INDEED, it is an instanceof papplet"); 
+  }
+  //new AnimController(this){
+  //  int a;
+  //  public void setup(){
+  //    a=0;
+  //    add( new DelayTransition(40),
+  //    new AnimEvent(){
+  //      public void occur(){
+  //        print("a= " +a);
+  //      }
+  //    }
+  //    //new AnimProcedure(){
+  //    //  public void setup(){
+          
+  //    //  }
+  //    //}
+  //    );
+  //  }
+  //  //public void draw(){
+      
+  //  //}
+  //}
+  //animController=
+  //new AnimController(this){
+    class SquareSequenceAnimProcedure extends AnimProcedure{
+      SquareSequenceAnimProcedure(int _startC,int _startN,int _maxDepth,PVector _origin){
+        //super(_applet);
+        startC=_startC; startN= _startN; origin=_origin; maxDepth=_maxDepth;
+      }
+      
       SquareAnimProcedure prevAnim;
+      int startC=5;
+      int startN=2;
+      PVector origin=PVadd(UPPER_LEFT,vec(1,-6));
+      PVector translate= vec(2,0);
       int depth=0;
+      int maxDepth=4;
+      ArrayList<SquareAnimProcedure> prevAnims= new ArrayList<SquareAnimProcedure>();
       public void setup(){
-        prevAnim=new SquareAnimProcedure(5,2,PVadd(UPPER_LEFT,vec(1,-6)),PVadd(UPPER_LEFT,vec(1+3,-6)));
+        prevAnim=new SquareAnimProcedure(startC,startN,origin,PVadd(origin,translate));
         add(prevAnim);
         AnimEvent continue_event=new AnimEvent(){
           public void occur(){
             depth++;
-            prevAnim=new SquareAnimProcedure(prevAnim.c,prevAnim.n, PVadd(UPPER_LEFT,vec(1+3,-6)),PVadd(UPPER_LEFT,vec(1+3,-6)));
+            prevAnims.add(prevAnim);
+            prevAnim=new SquareAnimProcedure(prevAnim.c,prevAnim.n, PVadd(origin,PVscale(translate,depth)),PVadd(origin,PVscale(translate,depth+1)));
             add(prevAnim);
-            if(depth<4){
+            if(depth<maxDepth){
               add(this);
             }
           }
         };
         add(continue_event);
+        
       }
       public void draw(){
+        for(SquareAnimProcedure anim:prevAnims){
+          anim.draw(); 
+        }
       };
     };
-  //animController=new SquareAnimProcedure(2,12,PVadd(UPPER_LEFT,vec(1,-6)));
+  animController=
+  new AnimController(this){
+    public void setup(){
+       //add(new SquareSequenceAnimProcedure(5,2,PVadd(UPPER_LEFT,vec(1,-6))));
+      add(
+        new AnimConcurrent(
+        new SquareSequenceAnimProcedure(2,2,3,PVadd(UPPER_LEFT,vec(1,-6))),
+        new SquareSequenceAnimProcedure(1,2,3,PVadd(UPPER_LEFT,vec(1,-3)))
+        ),
+        //),
+        new DelayTransition(10)
+      );
+    }
+  };
+  
   try{
     animController.setup();
   } catch (Exception e){
@@ -286,12 +367,25 @@ void setup(){
   //  }
   //});
 }
+boolean playingForward=true;
+int FrameCount=0;
+
 void draw(){
-  animController.run();
+  if(playingForward){
+    FrameCount++; 
+  }else{
+    FrameCount--;  
+  }
+  
+  animController.runProcess(FrameCount);
   
   //squares_split_diag.origin= vec((mouseX-width/2)/SCALE,-(mouseY-height/2)/SCALE);
   background(0);
+  fill(255);
+  textAlign(LEFT, TOP);
+  text("FrameCount:"+FrameCount,10,10);
   translate(width/2,height/2);
+  //translate(mouseX-width/2,mouseY-height/2);
  
   scale(SCALE,-SCALE);
   fill(255);
@@ -301,6 +395,9 @@ void draw(){
   } catch (Exception e){
     e.printStackTrace();
   }
-  
-  
+}
+void keyPressed(){
+  if(key=='p'){
+    playingForward=!playingForward;
+  }
 }
